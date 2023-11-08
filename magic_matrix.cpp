@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <omp.h>
+
 
 // The generateMagicSquare() function is supposed to generate a large matrix square from two smaller ones.
 //
@@ -74,6 +76,8 @@ bool allEqual( int arr[], int N)
     return true;
 }
 
+
+// CAN PARALLEL
 bool isPairwiseDistinct( int** matrix, int N) {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
@@ -202,9 +206,17 @@ int main(int argc, char *argv[])
     fclose(pattern_file);
     fclose(modifier_file);
 
+    //-------------------------------------//
+    //BEGINNING-OF-COMPUTATION-------------//
+    //-------------------------------------//
+
     generateMagicSquare(pattern, modifier, magicSquare, N, M);
 
     bool is_magic_square = isMagicSquare(magicSquare, M);
+    
+    //-------------------------------------//
+    //BOOL FOR DETERMINING MAGIC SQUARE----//
+    //-------------------------------------//
 
     // Print first 3 and last 3 elements of generated and checked matrix 
     for (int i = 0; i < 3; i++)
