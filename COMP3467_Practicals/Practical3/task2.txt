@@ -1,0 +1,14 @@
+--- Installing and running the OSU micro-benchmarks ---
+
+The OSU micro-benchmarks are a set of benchmarks for determining the performance of distributed and shared memory programming models, 
+and in particular, for determining the bandwidth and latency of P2P and collective operations via MPI.
+The source code is available at http://mvapich.cse.ohio-state.edu/benchmarks/.
+
+a) Download and extract the tarball available at https://mvapich.cse.ohio-state.edu/download/mvapich/osu-micro-benchmarks-7.2.tar.gz on NCC.
+
+b) Follow the instructions in the README file to build the benchmarks. 
+
+c) Write an sbatch script that runs the osu_bw and osu_latency tests between two MPI ranks on the *same* node.
+
+d) Write an sbatch script that runs the osu_bw and osu_latency tests between two MPI ranks on *different* nodes, 
+   and compare it to the results of task c).

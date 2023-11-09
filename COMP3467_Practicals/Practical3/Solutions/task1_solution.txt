@@ -1,0 +1,20 @@
+--- Install and run the HPL benchmark on NCC ---
+
+a) to f)
+1. Download the official HPL benchmark
+	wget https://www.netlib.org/benchmark/hpl/hpl-2.3.tar.gz
+2. Extract the downloaded archive file:
+	tar -xf hpl-2.3.tar.gz
+3. Enter the source code directory:
+	cd hpl-2.3/
+4. Load the MPI module:
+	module load intel-oneapi/2022.1.2/mpi
+5. Run the configure script that is delivered with HPL to check the dependencies and generate the Makefile:
+	./configure
+6. Build the executable:
+	make -j 4
+7. The executable "xhpl" is located in directory "testing". Copy the input file "HPL.dat" to this directory (assuming you are still in the source top directory "hpl-2.3"):
+	cp testing/ptest/HPL.dat testing
+8. Transfer the provided sbatch script "run_hpl.sh" to the source top directory and submit it to slurm:
+	sbatch run_hpl.sh 
+
