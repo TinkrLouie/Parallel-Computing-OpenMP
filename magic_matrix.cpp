@@ -143,6 +143,9 @@ bool isMagicSquare(int** matrix, int N)
 int main(int argc, char *argv[])
 {
 
+    // Timer Init
+    double itime, ftime, exec_time;
+
     if (argc != 3) {
         printf("Usage: %s <pattern_filename> <modifier_filename>\n", argv[0]);
         return 1;
@@ -210,6 +213,9 @@ int main(int argc, char *argv[])
     //BEGINNING-OF-COMPUTATION-------------//
     //-------------------------------------//
 
+    // Timer Init
+    itime = omp_get_wtime();
+
     generateMagicSquare(pattern, modifier, magicSquare, N, M);
 
     bool is_magic_square = isMagicSquare(magicSquare, M);
@@ -217,6 +223,9 @@ int main(int argc, char *argv[])
     //-------------------------------------//
     //BOOL FOR DETERMINING MAGIC SQUARE----//
     //-------------------------------------//
+
+    // Timer end
+    ftime = omp_get_wtime();
 
     // Print first 3 and last 3 elements of generated and checked matrix 
     for (int i = 0; i < 3; i++)
@@ -235,6 +244,10 @@ int main(int argc, char *argv[])
     if(is_magic_square) printf("Generated matrix is a magic square.\n");
     else                printf("Generated matrix is not a magic square.\n");
 
+    // Timer print out
+    exec_time = ftime - itime;
+    printf("\n");
+    printf("Total computation time: %f\n", exec_time);
 
     // free dynamically allocated memory
     for (int i = 0; i < M; i++) {
