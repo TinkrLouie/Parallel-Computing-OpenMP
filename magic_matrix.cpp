@@ -21,7 +21,10 @@
 //
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
-{
+{   
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp target parallel for collapse(2)
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -30,6 +33,9 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 	    }
     }
 
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp target parallel for collapse(2)
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < M; j++)
@@ -46,6 +52,9 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 int sumRow( int** matrix, int row, int N)
 {
     int sum = 0;
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp target teams distribute parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
@@ -57,6 +66,9 @@ int sumRow( int** matrix, int row, int N)
 int sumColumn( int** matrix, int col, int N)
 {
     int sum = 0;
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp target teams distribute parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[i][col];
@@ -66,10 +78,13 @@ int sumColumn( int** matrix, int col, int N)
 
 // checks if all elements in an array are equal
 bool allEqual( int arr[], int N)
-{
+{   
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp target parallel for
     for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
-	{
+	    {
             return false;
         }
     }
