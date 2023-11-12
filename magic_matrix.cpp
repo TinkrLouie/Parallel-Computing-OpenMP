@@ -54,7 +54,7 @@ int sumRow( int** matrix, int row, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:sum) //schedule(dynamic, 20)
+    #pragma omp target teams distribute parallel for reduction(+:sum) //schedule(dynamic, 20)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
@@ -68,7 +68,7 @@ int sumColumn( int** matrix, int col, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:sum) //schedule(dynamic, 20)
+    #pragma omp target teams distribute parallel for reduction(+:sum) //schedule(dynamic, 20)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[i][col];
@@ -152,7 +152,7 @@ bool isMagicSquare(int** matrix, int N)
     // compute sum of elements on main diagonal
      //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:main_diag_sum)//schedule(dynamic, d)
+    #pragma omp target teams distribute parallel for reduction(+:main_diag_sum)//schedule(dynamic, d)
     for (int i = 0; i < N; i++)
     {
         main_diag_sum += matrix[i][i];
@@ -162,7 +162,7 @@ bool isMagicSquare(int** matrix, int N)
     // compute sum of elements on antidiagonal
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:anti_diag_sum)//schedule(dynamic, d)
+    #pragma omp target teams distribute parallel for reduction(+:anti_diag_sum)//schedule(dynamic, d)
     for (int i = 0; i < N; i++)
     {
         anti_diag_sum += matrix[i][N - 1 - i];
