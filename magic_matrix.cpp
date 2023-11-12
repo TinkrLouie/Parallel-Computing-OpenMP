@@ -233,9 +233,6 @@ int main(int argc, char *argv[])
     }
 
     // read-in matrix data
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for
     for (int i = 0; i < N; i++) {
 	    pattern[i] = new int[N];
 	    modifier[i] = new int[N];
