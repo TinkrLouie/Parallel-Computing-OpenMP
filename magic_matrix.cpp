@@ -54,7 +54,7 @@ int sumRow( int** matrix, int row, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    //#pragma omp target teams distribute parallel for reduction(+:sum)
+    #pragma omp target teams distribute parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
@@ -82,7 +82,7 @@ bool allEqual( int arr[], int N)
     bool found = true;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    //#pragma omp parallel for
+    #pragma omp parallel for
     for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
 	    {
