@@ -8,7 +8,7 @@
     0.015083789825439 dynamic, 2
     0.004941940307617 dynamic, 5
     0.003712177276611 dynamic, 10
-
+    0.003430843353271 dynamic, 20 with 400 at freeing memory
 
 
 3x3 3x3:
@@ -16,6 +16,7 @@
 
 -Log:
     0.000058889389038
+    0.000077009201050 dynamic, 20 with 400 at freeing memory
     
 
 
@@ -24,4 +25,5 @@
 
 -Log:
     0.162724971771240
+    0.000325918197632 dynamic, 20 with 400 at freeing memory
     
