@@ -241,6 +241,10 @@ int main(int argc, char *argv[])
     if(is_magic_square) printf("Generated matrix is a magic square.\n");
     else                printf("Generated matrix is not a magic square.\n");
 
+    // Timer print out
+    exec_time = ftime - itime;
+    printf("\n");
+    printf("Total computation time: %.5f\n", exec_time);
 
     // CAN TRY TO PARALLEL
     // free dynamically allocated memory

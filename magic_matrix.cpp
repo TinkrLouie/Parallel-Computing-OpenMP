@@ -279,6 +279,7 @@ int main(int argc, char *argv[])
     printf("\n");
     printf("Total computation time: %.5f\n", exec_time);
 
+    // CAN TRY TO PARALLEL
     // free dynamically allocated memory
     for (int i = 0; i < M; i++) {
         delete[] magicSquare[i];
