@@ -224,6 +224,7 @@ int main(int argc, char *argv[])
     else                printf("Generated matrix is not a magic square.\n");
 
 
+    // CAN TRY TO PARALLEL
     // free dynamically allocated memory
     for (int i = 0; i < M; i++) {
         delete[] magicSquare[i];
