@@ -251,7 +251,7 @@ int main(int argc, char *argv[])
     // Timer print out
     exec_time = ftime - itime;
     printf("\n");
-    printf("Total computation time: %.10f\n", exec_time);
+    printf("Total computation time: %.15f\n", exec_time);
 
     // CAN TRY TO PARALLEL
     // free dynamically allocated memory

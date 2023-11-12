@@ -158,7 +158,7 @@ bool isMagicSquare(int** matrix, int N)
     if (main_diag_sum != row_sum) return false;
 
     // compute sum of elements on antidiagonal
-     //----------------------------------------------------------------
+    //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
     #pragma omp parallel for
     for (int i = 0; i < N; i++)
@@ -225,12 +225,17 @@ int main(int argc, char *argv[])
     int** magicSquare = new int*[M];
     
     // CAN PARALLEL
-
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for
     for (int i = 0; i < M; i++) {
 	    magicSquare[i] = new int[M];
     }
 
     // read-in matrix data
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for
     for (int i = 0; i < N; i++) {
 	    pattern[i] = new int[N];
 	    modifier[i] = new int[N];
@@ -289,7 +294,7 @@ int main(int argc, char *argv[])
     // Timer print out
     exec_time = ftime - itime;
     printf("\n");
-    printf("Total computation time: %.10f\n", exec_time);
+    printf("Total computation time: %.15f\n", exec_time);
 
     // CAN TRY TO PARALLEL
     // free dynamically allocated memory
