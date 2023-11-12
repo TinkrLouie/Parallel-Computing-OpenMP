@@ -54,7 +54,7 @@ int sumRow( int** matrix, int row, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp target parallel for reduction(+:sum)
+    #pragma omp parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
