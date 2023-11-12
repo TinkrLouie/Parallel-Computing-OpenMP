@@ -24,7 +24,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 {   
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp target parallel for collapse(2)
+    #pragma omp parallel for collapse(2)
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -35,7 +35,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp target parallel for collapse(2)
+    #pragma omp parallel for collapse(2)
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < M; j++)
@@ -94,6 +94,9 @@ bool allEqual( int arr[], int N)
 
 // CAN PARALLEL
 bool isPairwiseDistinct( int** matrix, int N) {
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp teams distribute parallel for collapse(4)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
@@ -206,6 +209,9 @@ int main(int argc, char *argv[])
     int M = N*N;
 
     int** magicSquare = new int*[M];
+    
+    // CAN PARALLEL
+
     for (int i = 0; i < M; i++) {
 	    magicSquare[i] = new int[M];
     }
@@ -269,7 +275,7 @@ int main(int argc, char *argv[])
     // Timer print out
     exec_time = ftime - itime;
     printf("\n");
-    printf("Total computation time: %f\n", exec_time);
+    printf("Total computation time: %.5f\n", exec_time);
 
     // free dynamically allocated memory
     for (int i = 0; i < M; i++) {
