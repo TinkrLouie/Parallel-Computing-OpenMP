@@ -9,6 +9,7 @@
     0.004941940307617 dynamic, 5
     0.003712177276611 dynamic, 10
     0.003430843353271 dynamic, 20 with 400 at freeing memory
+    0.003931999206543 dynamic, 20 with parallel reading matrix
 
 
 3x3 3x3:
