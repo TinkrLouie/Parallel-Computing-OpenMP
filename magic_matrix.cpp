@@ -35,7 +35,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2)
+    //#pragma omp parallel for collapse(2)
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < M; j++)
@@ -54,7 +54,7 @@ int sumRow( int** matrix, int row, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp target teams distribute parallel for reduction(+:sum)
+    //#pragma omp target teams distribute parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
@@ -68,7 +68,7 @@ int sumColumn( int** matrix, int col, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp target teams distribute parallel for reduction(+:sum)
+    //#pragma omp target teams distribute parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[i][col];
@@ -82,7 +82,7 @@ bool allEqual( int arr[], int N)
     bool found = true;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for
+    //#pragma omp parallel for
     for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
 	    {
@@ -98,7 +98,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     bool found = false;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2)
+    //#pragma omp parallel for collapse(2)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
