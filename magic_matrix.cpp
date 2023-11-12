@@ -79,13 +79,14 @@ int sumColumn( int** matrix, int col, int N)
 // checks if all elements in an array are equal
 bool allEqual( int arr[], int N)
 {   
+    bool found = true;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    // #pragma omp target parallel for
+    #pragma omp parallel for
     for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
 	    {
-            return false;
+            found = false;
         }
     }
     return true;
@@ -94,6 +95,7 @@ bool allEqual( int arr[], int N)
 
 // CAN PARALLEL
 bool isPairwiseDistinct( int** matrix, int N) {
+    bool found = false;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
     #pragma omp parallel for collapse(2)
@@ -105,14 +107,14 @@ bool isPairwiseDistinct( int** matrix, int N) {
                     if (row != i || col != j) {
                         int otherElement = matrix[row][col];
                         if (currentElement == otherElement) {
-                            return true;
+                            found = true;
                         }
                     }
                 }
             }
         }
     }
-    return false;
+    return found;
 }
 
 // checks if matrix is a magic square
