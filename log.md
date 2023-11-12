@@ -4,9 +4,10 @@
 -Log:
     38.03994
     0.0088789463
-    0.005448102951050 (default schedule, static, 1)
-    0.015083789825439 (with dynamic schedule, 2)
-    0.004941940307617 (dynamic, 5)
+    0.005448102951050 default static, 1
+    0.015083789825439 dynamic, 2
+    0.004941940307617 dynamic, 5
+    0.003712177276611 dynamic, 10
 
 
 
