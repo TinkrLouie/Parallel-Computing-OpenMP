@@ -237,35 +237,37 @@ int main(int argc, char *argv[])
     }
 
     // read-in matrix data
-    int ret = 0;
+    // int ret = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for schedule(dynamic, d)
+    // #pragma omp parallel for schedule(dynamic, d)
     for (int i = 0; i < N; i++) {
 	    pattern[i] = new int[N];
 	    modifier[i] = new int[N];
         for (int j = 0; j < N; j++) {
             if (fscanf(pattern_file, "%d", &pattern[i][j]) != 1) {
-                // printf("Error reading matrix values pattern.\n");
-                // fclose(pattern_file);
-                ret = 1;
+                printf("Error reading matrix values pattern.\n");
+                fclose(pattern_file);
+                return 1;
+                // ret = 1;
             }
             if (fscanf(modifier_file, "%d", &modifier[i][j]) != 1) {
-                // printf("Error reading matrix values modifier.\n");
-                // fclose(modifier_file);
-                ret = 2;
+                printf("Error reading matrix values modifier.\n");
+                fclose(modifier_file);
+                return 1;
+                // ret = 2;
             }
         }
     }
 
-    if (ret == 1) {
-        printf("Error reading matrix values pattern.\n");
-        return 1;
-    }
-    if (ret == 2) {
-        printf("Error reading matrix values modifier.\n");
-        return 1;
-    }
+    // if (ret == 1) {
+    //     printf("Error reading matrix values pattern.\n");
+    //     return 1;
+    // }
+    // if (ret == 2) {
+    //     printf("Error reading matrix values modifier.\n");
+    //     return 1;
+    // }
     fclose(pattern_file);
     fclose(modifier_file);
 
