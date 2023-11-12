@@ -68,7 +68,7 @@ int sumColumn( int** matrix, int col, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    //#pragma omp target teams distribute parallel for reduction(+:sum)
+    #pragma omp parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[i][col];

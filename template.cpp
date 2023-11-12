@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <omp.h>
 
 // The generateMagicSquare() function is supposed to generate a large matrix square from two smaller ones.
 //
@@ -144,6 +145,9 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    // Timer Init
+    double itime, ftime, exec_time;
+
     FILE *pattern_file = fopen(argv[1], "r");
     FILE *modifier_file = fopen(argv[2], "r");
 
@@ -202,9 +206,23 @@ int main(int argc, char *argv[])
     fclose(pattern_file);
     fclose(modifier_file);
 
+    //-------------------------------------//
+    //BEGINNING-OF-COMPUTATION-------------//
+    //-------------------------------------//
+
+    // Timer Init
+    itime = omp_get_wtime();
+
     generateMagicSquare(pattern, modifier, magicSquare, N, M);
 
     bool is_magic_square = isMagicSquare(magicSquare, M);
+
+    //-------------------------------------//
+    //BOOL FOR DETERMINING MAGIC SQUARE----//
+    //-------------------------------------//
+
+    // Timer end
+    ftime = omp_get_wtime();
 
     // Print first 3 and last 3 elements of generated and checked matrix 
     for (int i = 0; i < 3; i++)
