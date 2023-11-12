@@ -89,7 +89,7 @@ bool allEqual( int arr[], int N)
             found = false;
         }
     }
-    return true;
+    return found;
 }
 
 
