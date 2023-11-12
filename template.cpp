@@ -148,6 +148,13 @@ int main(int argc, char *argv[])
     // Timer Init
     double itime, ftime, exec_time;
 
+    int num_teams= omp_get_num_teams(); 
+    int num_threads_per_team = omp_get_num_threads();
+    printf("Running on GPU with %d teams and %d threads per team\n", 
+      num_teams, 
+      num_threads_per_team
+    );
+
     FILE *pattern_file = fopen(argv[1], "r");
     FILE *modifier_file = fopen(argv[2], "r");
 
@@ -244,7 +251,7 @@ int main(int argc, char *argv[])
     // Timer print out
     exec_time = ftime - itime;
     printf("\n");
-    printf("Total computation time: %.5f\n", exec_time);
+    printf("Total computation time: %.10f\n", exec_time);
 
     // CAN TRY TO PARALLEL
     // free dynamically allocated memory

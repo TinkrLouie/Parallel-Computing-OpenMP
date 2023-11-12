@@ -126,6 +126,9 @@ bool isMagicSquare(int** matrix, int N)
     int anti_diag_sum = 0;
 
     // compute row sums
+     //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for
     for (int i = 0; i < N; i++)
     {
         row_sums[i] = sumRow(matrix, i, N);
@@ -135,6 +138,9 @@ bool isMagicSquare(int** matrix, int N)
     int row_sum = row_sums[0];
 
     // compute column sums
+     //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for
     for (int i = 0; i < N; i++)
     {
         col_sums[i] = sumColumn(matrix, i, N);
@@ -142,6 +148,9 @@ bool isMagicSquare(int** matrix, int N)
     if (!allEqual(col_sums, N)) return false;
 
     // compute sum of elements on main diagonal
+     //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for
     for (int i = 0; i < N; i++)
     {
         main_diag_sum += matrix[i][i];
@@ -149,6 +158,9 @@ bool isMagicSquare(int** matrix, int N)
     if (main_diag_sum != row_sum) return false;
 
     // compute sum of elements on antidiagonal
+     //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for
     for (int i = 0; i < N; i++)
     {
         anti_diag_sum += matrix[i][N - 1 - i];
@@ -277,15 +289,21 @@ int main(int argc, char *argv[])
     // Timer print out
     exec_time = ftime - itime;
     printf("\n");
-    printf("Total computation time: %.5f\n", exec_time);
+    printf("Total computation time: %.10f\n", exec_time);
 
     // CAN TRY TO PARALLEL
     // free dynamically allocated memory
+     //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for
     for (int i = 0; i < M; i++) {
         delete[] magicSquare[i];
     }
     delete[] magicSquare;
 
+     //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for
     for (int i = 0; i < N; i++) {
 	    delete[] pattern[i];
 	    delete[] modifier[i];
