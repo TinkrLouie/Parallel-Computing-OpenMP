@@ -54,7 +54,7 @@ int sumRow( int** matrix, int row, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp target teams distribute parallel for reduction(+:sum) //schedule(dynamic, 20)
+    //#pragma omp target teams distribute parallel for reduction(+:sum) //schedule(dynamic, 20)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
@@ -68,7 +68,7 @@ int sumColumn( int** matrix, int col, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp target teams distribute parallel for reduction(+:sum) //schedule(dynamic, 20)
+    //#pragma omp target teams distribute parallel for reduction(+:sum) //schedule(dynamic, 20)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[i][col];
