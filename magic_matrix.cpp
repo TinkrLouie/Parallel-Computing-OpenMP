@@ -24,7 +24,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 {   
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2)
+    #pragma omp parallel for collapse(2) schedule(static)
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -35,17 +35,32 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2)
-    for (int i = 0; i < M; i++)
+    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier)
+    const int blockSize = 16;  // Experiment with different block sizes
+
+    for (int iOuter = 0; iOuter < M; iOuter += blockSize)
     {
-        for (int j = 0; j < M; j++)
+        for (int jOuter = 0; jOuter < M; jOuter += blockSize)
         {
-            int patternRow = i % N;
-            int patternCol = j % N;
-            magicSquare[i][j] = pattern[patternRow][patternCol];
-	        magicSquare[i][j] += modifier[i/N][j/N];
+            for (int i = iOuter; i < iOuter + blockSize && i < M; i++)
+            {
+                int patternRow = i % N;
+                int modifierRow = i / N;
+
+                int* patternRowPtr = pattern[patternRow];
+                int* modifierRowPtr = modifier[modifierRow];
+
+                for (int j = jOuter; j < jOuter + blockSize && j < M; j++)
+                {
+                    int patternCol = j % N;
+                    int modifierCol = j / N;
+
+                    magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
+                }
+            }
         }
     }
+
 }
 
 // computes sum of elements in a row
@@ -54,7 +69,7 @@ int sumRow( int** matrix, int row, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    //#pragma omp target teams distribute parallel for reduction(+:sum) //schedule(dynamic, 20)
+    #pragma omp parallel for reduction(+:sum) schedule(static)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
@@ -68,7 +83,7 @@ int sumColumn( int** matrix, int col, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    //#pragma omp target teams distribute parallel for reduction(+:sum) //schedule(dynamic, 20)
+    #pragma omp parallel for reduction(+:sum) schedule(static)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[i][col];
@@ -85,7 +100,7 @@ bool allEqual( int arr[], int N)
     bool found = true;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for
+    #pragma omp parallel for schedule(static)
     for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
 	    {
@@ -102,7 +117,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     std::unordered_set<int> elementSet;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2)
+    #pragma omp parallel for collapse(2) schedule(static)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
@@ -124,7 +139,7 @@ bool isMagicSquare(int** matrix, int N)
 
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:main_diag_sum, anti_diag_sum)
+    #pragma omp parallel for reduction(+:main_diag_sum, anti_diag_sum) schedule(static)
     for (int i = 0; i < N; i++)
     {   
         // compute row sums
@@ -207,7 +222,7 @@ int main(int argc, char *argv[])
     // CAN PARALLEL
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for
+    #pragma omp parallel for schedule(static)
     for (int i = 0; i < M; i++) {
 	    magicSquare[i] = new int[M];
     }
@@ -292,7 +307,7 @@ int main(int argc, char *argv[])
     // free dynamically allocated memory
      //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for
+    #pragma omp parallel for schedule(static)
     for (int i = 0; i < M; i++) {
         delete[] magicSquare[i];
     }
@@ -300,7 +315,7 @@ int main(int argc, char *argv[])
 
      //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for
+    #pragma omp parallel for schedule(static)
     for (int i = 0; i < N; i++) {
 	    delete[] pattern[i];
 	    delete[] modifier[i];
