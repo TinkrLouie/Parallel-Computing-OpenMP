@@ -117,13 +117,17 @@ bool isPairwiseDistinct( int** matrix, int N) {
     std::unordered_set<int> elementSet;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) schedule(static)
+    #pragma omp parallel for collapse(2) schedule(static) shared(found)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-            if (elementSet.find(currentElement) != elementSet.end()) {
+            #pragma omp atomic
+            {
+                if (elementSet.find(currentElement) != elementSet.end()) {
                 found = true;
             }
+            }
+            
         }
     }
     return found;
