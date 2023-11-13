@@ -124,7 +124,7 @@ bool isMagicSquare(int** matrix, int N)
 
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:main_diag_sum, anti_diag_sum)
+    #pragma omp parallel loop reduction(+:main_diag_sum, anti_diag_sum)
     for (int i = 0; i < N; i++)
     {   
         // compute row sums
@@ -161,8 +161,6 @@ int main(int argc, char *argv[])
         printf("Usage: %s <pattern_filename> <modifier_filename>\n", argv[0]);
         return 1;
     }
-    
-    int d = 20;
 
     // Code for checking teams and threads num
     // int num_teams= omp_get_num_teams(); 
