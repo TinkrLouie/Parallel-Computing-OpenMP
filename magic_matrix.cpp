@@ -69,7 +69,7 @@ int sumRow( int** matrix, int row, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:sum) schedule(static)
+    #pragma omp parallel for //reduction(+:sum) schedule(static)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
@@ -83,7 +83,7 @@ int sumColumn( int** matrix, int col, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:sum) schedule(static)
+    #pragma omp parallel for //reduction(+:sum) schedule(static)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[i][col];
