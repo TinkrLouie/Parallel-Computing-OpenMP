@@ -149,9 +149,10 @@ bool isMagicSquare(int** matrix, int N)
     if (main_diag_sum != row_sum) return false;
     if (anti_diag_sum != row_sum) return false;
     
-    if(isPairwiseDistinct(matrix, N))
-	    return false;
-    return true;
+    //if(isPairwiseDistinct(matrix, N))
+	//    return false;
+    // return true;
+    return !isPairwiseDistinct(matrix, N);
 }
 
 int main(int argc, char *argv[])
