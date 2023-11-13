@@ -92,27 +92,18 @@ int sumColumn( int** matrix, int col, int N)
 }
 
 // checks if all elements in an array are equal
-// TEST IF BETTER WITH PARALLEL OR NOT--------------------------------
-// -------------------------------------------------------------------
-//--------------------------------------------------------------------
+// No need for parallel
 bool allEqual( int arr[], int N)
 {   
-    //bool found = true;
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    //#pragma omp parallel for schedule(static)
     for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
 	    {
-            //found = false;
             return false;
         }
     }
     return true;
 }
 
-
-// CAN PARALLEL
 bool isPairwiseDistinct( int** matrix, int N) {
     bool found = false;
     std::unordered_set<int> elementSet;
@@ -140,7 +131,7 @@ bool isMagicSquare(int** matrix, int N)
 
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:main_diag_sum, anti_diag_sum) schedule(static)
+    #pragma omp parallel for //reduction(+:main_diag_sum, anti_diag_sum) schedule(static)
     for (int i = 0; i < N; i++)
     {   
         // compute row sums
