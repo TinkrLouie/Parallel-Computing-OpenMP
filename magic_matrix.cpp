@@ -100,14 +100,15 @@ bool allEqual( int arr[], int N)
     bool found = true;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for schedule(static)
+    //#pragma omp parallel for schedule(static)
     for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
 	    {
-            found = false;
+            //found = false;
+            return false;
         }
     }
-    return found;
+    return true;
 }
 
 
@@ -117,7 +118,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     std::unordered_set<int> elementSet;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) schedule(dynamic, 100) shared(found)
+    #pragma omp parallel for collapse(2) schedule(static) shared(found)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
@@ -151,14 +152,10 @@ bool isMagicSquare(int** matrix, int N)
         // compute sum of elements on antidiagonal
         anti_diag_sum += matrix[i][N - 1 - i];
     }
+    int row_sum = row_sums[0];  
     if (!allEqual(row_sums, N)) return false;
-
-    int row_sum = row_sums[0];
-
     if (!allEqual(col_sums, N)) return false;
-
     if (main_diag_sum != row_sum) return false;
-
     if (anti_diag_sum != row_sum) return false;
     
     if(isPairwiseDistinct(matrix, N))
