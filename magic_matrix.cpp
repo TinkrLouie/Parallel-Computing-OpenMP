@@ -97,18 +97,18 @@ int sumColumn( int** matrix, int col, int N)
 //--------------------------------------------------------------------
 bool allEqual( int arr[], int N)
 {   
-    bool found = true;
+    //bool found = true;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
     #pragma omp parallel for schedule(static)
     for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
 	    {
-            found = false;
-            //return false;
+            //found = false;
+            return false;
         }
     }
-    return found;
+    return true;
 }
 
 
