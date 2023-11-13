@@ -100,7 +100,7 @@ bool allEqual( int arr[], int N)
     //bool found = true;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for schedule(static)
+    //#pragma omp parallel for schedule(static)
     for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
 	    {
