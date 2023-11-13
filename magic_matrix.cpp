@@ -124,7 +124,7 @@ bool isMagicSquare(int** matrix, int N)
 
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp target teams loop reduction(+:main_diag_sum, anti_diag_sum)
+    #pragma omp parallel for reduction(+:main_diag_sum, anti_diag_sum)
     for (int i = 0; i < N; i++)
     {   
         // compute row sums

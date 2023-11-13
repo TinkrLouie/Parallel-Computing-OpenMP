@@ -11,6 +11,7 @@
     0.003430843353271 dynamic, 20 with 400 at freeing memory
     0.003931999206543 dynamic, 20 with parallel reading matrix
     0.009217977523804 no schedule but major changes to isMagicSquare and isPairwiseDistinct
+    0.236486911773682 with target teams loop
 
 
 3x3 3x3:
