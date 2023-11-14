@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <omp.h>
+#include <unordered_set>
 
 // The generateMagicSquare() function is supposed to generate a large matrix square from two smaller ones.
 //
@@ -86,27 +87,53 @@ bool allEqual( int arr[], int N)
     return true;
 }
 
+//bool isPairwiseDistinct( int** matrix, int N) {
+//    ////----------------------------------------------------------------
+//    //// OpenMP here!!!-------------------------------------------------
+//    //#pragma omp parallel for collapse(2) schedule(static)
+//    for (int i = 0; i < N; i++) {
+//        for (int j = 0; j < N; j++) {
+//            int currentElement = matrix[i][j];
+//            for (int row = 0; row < N; row++) {
+//                for (int col = 0; col < N; col++) {
+//                    if (row != i || col != j) {
+//                        int otherElement = matrix[row][col];
+//                        if (currentElement == otherElement) {
+//                            return true;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    return false;
+//}
 bool isPairwiseDistinct( int** matrix, int N) {
-    ////----------------------------------------------------------------
-    //// OpenMP here!!!-------------------------------------------------
-    //#pragma omp parallel for collapse(2) schedule(static)
+    bool found = false;
+    std::unordered_set<int> elementSet;
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for collapse(2) schedule(static) shared(found, elementSet)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-            for (int row = 0; row < N; row++) {
-                for (int col = 0; col < N; col++) {
-                    if (row != i || col != j) {
-                        int otherElement = matrix[row][col];
-                        if (currentElement == otherElement) {
-                            return true;
-                        }
-                    }
+            #pragma omp critical
+            {
+                if (elementSet.find(currentElement) != elementSet.end()) {
+                    found = true;
+                } else {
+                    elementSet.insert(currentElement);
                 }
             }
+            //if (found) {
+            //    // Use #pragma omp cancel to break out of the loop
+            //    #pragma omp cancel for
+            //}
         }
     }
-    return false;
-}
+    return found;
+}  
+
 
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N)
@@ -174,12 +201,12 @@ int main(int argc, char *argv[])
     // Timer Init
     double itime, ftime, exec_time;
 
-    int num_teams= omp_get_num_teams(); 
-    int num_threads_per_team = omp_get_num_threads();
-    printf("Running on GPU with %d teams and %d threads per team\n", 
-      num_teams, 
-      num_threads_per_team
-    );
+    //int num_teams= omp_get_num_teams(); 
+    //int num_threads_per_team = omp_get_num_threads();
+    //printf("Running on GPU with %d teams and %d threads per team\n", 
+    //  num_teams, 
+    //  num_threads_per_team
+    //);
 
     FILE *pattern_file = fopen(argv[1], "r");
     FILE *modifier_file = fopen(argv[2], "r");
