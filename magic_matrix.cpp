@@ -134,10 +134,10 @@ bool isPairwiseDistinct( int** matrix, int N) {
                     elementSet.insert(currentElement);
                 }
             }
-            //if (found) {
-            //    // Use #pragma omp cancel to break out of the loop
-            //    #pragma omp cancel for
-            //}
+            if (found) {
+                // Use #pragma omp cancel to break out of the loop
+                #pragma omp cancel for
+            }
         }
     }
     return found;

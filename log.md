@@ -15,7 +15,7 @@
     0.007000207901001 with optimised generateMagicSquare
     0.009648799896240 if is magic matrix, 0.001686096191406 if not
     49.149247884750366 simple one
-
+    0.083806991577148 simple
     
 
 
