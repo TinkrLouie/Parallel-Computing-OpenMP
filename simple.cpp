@@ -122,6 +122,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
             if (elementSet.find(currentElement) != elementSet.end()) {
                 found = true;
             } else {
+                #pragma omp atomic
                 elementSet.insert(currentElement);
             }
             
