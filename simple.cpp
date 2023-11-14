@@ -235,7 +235,7 @@ int main(int argc, char *argv[])
     }
 
     // Timer Init
-    double itime, ftime, exec_time, gMSe;;
+    double itime, ftime, exec_time, gMSe, gMSt, iMSt;
 
     //int num_teams= omp_get_num_teams(); 
     //int num_threads_per_team = omp_get_num_threads();
@@ -343,9 +343,11 @@ int main(int argc, char *argv[])
 
     // Timer print out
     exec_time = ftime - itime;
+    gMSt = gMSe - ftime;
+    iMSt = exec_time - gMSe;
     printf("\n");
-    printf("generateMagicSquare computation time: %.15f\n", gMSe - ftime);
-    printf("isMagicSquare computation time: %.15f\n", exec_time - gMSe);
+    printf("generateMagicSquare computation time: %.15f\n", gMSt);
+    printf("isMagicSquare computation time: %.15f\n", iMSt);
     printf("Total computation time: %.15f\n", exec_time);
 
     // CAN TRY TO PARALLEL
