@@ -87,9 +87,9 @@ bool allEqual( int arr[], int N)
 }
 
 bool isPairwiseDistinct( int** matrix, int N) {
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) schedule(static)
+    ////----------------------------------------------------------------
+    //// OpenMP here!!!-------------------------------------------------
+    //#pragma omp parallel for collapse(2) schedule(static)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
