@@ -99,6 +99,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 
     // VERSION 4
     int body_start_index;
+    printf("Bonk 1\n");
     ////----------------------------------------------------------------
     //// OpenMP here!!!-------------------------------------------------
     #pragma omp parallel private(body_start_index)
@@ -124,6 +125,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     
         }
     }
+    printf("Bonk 2\n");
 }
 
 // computes sum of elements in a row
