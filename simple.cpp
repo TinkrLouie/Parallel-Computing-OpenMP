@@ -343,8 +343,8 @@ int main(int argc, char *argv[])
 
     // Timer print out
     exec_time = ftime - itime;
-    gMSt = gMSe - ftime;
-    iMSt = exec_time - gMSe;
+    gMSt = gMSe - itime;
+    iMSt = ftime - gMSe;
     printf("\n");
     printf("generateMagicSquare computation time: %.15f\n", gMSt);
     printf("isMagicSquare computation time: %.15f\n", iMSt);
