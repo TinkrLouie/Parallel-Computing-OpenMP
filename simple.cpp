@@ -336,11 +336,12 @@ int main(int argc, char *argv[])
     exec_time = ftime - itime;
     gMSt = gMSe - itime;
     iMSt = ftime - gMSe;
-    printf("\n");
+    
     printf("generateMagicSquare computation time: %.15f\n", gMSt);
     printf("isMagicSquare computation time: %.15f\n", iMSt);
     printf("Total computation time: %.15f\n", exec_time);
-
+    printf("\n");
+    
     // Print first 3 and last 3 elements of generated and checked matrix 
     for (int i = 0; i < 3; i++)
     {
