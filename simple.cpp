@@ -32,44 +32,23 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 		    modifier[i][j] *= M;
 	    }
     }
+
+    // VERSION 1
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2)
-    for (int i = 0; i < M; i++)
-    {
-        for (int j = 0; j < M; j++)
-        {
-            int patternRow = i % N;
-            int patternCol = j % N;
-            magicSquare[i][j] = pattern[patternRow][patternCol];
-	        magicSquare[i][j] += modifier[i/N][j/N];
-        }
-    }
-
-    //const int blockSize = 32;  // Experiment with different block sizes
-    ////----------------------------------------------------------------
-    //// OpenMP here!!!-------------------------------------------------
-    //#pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier)
-    //for (int iOuter = 0; iOuter < M; iOuter += blockSize)
+    //#pragma omp parallel for collapse(2)
+    //for (int i = 0; i < M; i++)
     //{
-    //    for (int jOuter = 0; jOuter < M; jOuter += blockSize)
+    //    for (int j = 0; j < M; j++)
     //    {
-    //        for (int i = iOuter; i < iOuter + blockSize && i < M; i++)
-    //        {
-    //            int patternRow = i % N;
-    //            int modifierRow = i / N;
-    //            int* patternRowPtr = pattern[patternRow];
-    //            int* modifierRowPtr = modifier[modifierRow];
-    //            for (int j = jOuter; j < jOuter + blockSize && j < M; j++)
-    //            {
-    //                int patternCol = j % N;
-    //                int modifierCol = j / N;
-    //                magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
-    //            }
-    //        }
+    //        int patternRow = i % N;
+    //        int patternCol = j % N;
+    //        magicSquare[i][j] = pattern[patternRow][patternCol];
+	//        magicSquare[i][j] += modifier[i/N][j/N];
     //    }
     //}
 
+    // VERSION 2
     //#pragma omp parallel for shared(pattern, modifier, magicSquare)
     //for (int i = 0; i < M; i++)
     //{
@@ -87,6 +66,33 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //        magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
     //    }
     //}
+
+    // VERSION 3
+    const int blockSize = 32;  // Experiment with different block sizes
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier)
+    for (int iOuter = 0; iOuter < M; iOuter += blockSize)
+    {
+        for (int jOuter = 0; jOuter < M; jOuter += blockSize)
+        {
+            for (int i = iOuter; i < iOuter + blockSize && i < M; i++)
+            {
+                int patternRow = i % N;
+                int modifierRow = i / N;
+                int* patternRowPtr = pattern[patternRow];
+                int* modifierRowPtr = modifier[modifierRow];
+                for (int j = jOuter; j < jOuter + blockSize && j < M; j++)
+                {
+                    int patternCol = j % N;
+                    int modifierCol = j / N;
+                    magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
+                }
+            }
+        }
+    }
+
+    
 }
 
 // computes sum of elements in a row
