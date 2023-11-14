@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
     }
 
     // Timer Init
-    double itime, ftime, exec_time, gMSe, gMSt, iMSt;
+    double itime, ftime, exec_time; //gMSe, gMSt, iMSt;
 
     //int num_teams= omp_get_num_teams(); 
     //int num_threads_per_team = omp_get_num_threads();
@@ -324,7 +324,7 @@ int main(int argc, char *argv[])
     itime = omp_get_wtime();
 
     generateMagicSquare(pattern, modifier, magicSquare, N, M);
-    gMSe = omp_get_wtime();
+    //gMSe = omp_get_wtime();
 
     bool is_magic_square = isMagicSquare(magicSquare, M);
 
@@ -337,11 +337,11 @@ int main(int argc, char *argv[])
 
     // Timer print out
     exec_time = ftime - itime;
-    gMSt = gMSe - itime;
-    iMSt = ftime - gMSe;
+    //gMSt = gMSe - itime;
+    //iMSt = ftime - gMSe;
     
-    printf("generateMagicSquare computation time: %.15f\n", gMSt);
-    printf("isMagicSquare computation time: %.15f\n", iMSt);
+    //printf("generateMagicSquare computation time: %.15f\n", gMSt);
+    //printf("isMagicSquare computation time: %.15f\n", iMSt);
     printf("Total computation time: %.15f\n", exec_time);
     printf("\n");
 
