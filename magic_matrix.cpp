@@ -135,6 +135,7 @@ bool allEqual( int arr[], int N)
 // }
 
 bool isPairwiseDistinct( int** matrix, int N) {
+    bool found = false;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
     #pragma omp parallel for collapse(2) schedule(static)
@@ -149,7 +150,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
                     if (row != i || col != j) {
                         int otherElement = matrix[row][col];
                         if (currentElement == otherElement) {
-                            return true;
+                            found = true;
                         }
                     }
                 }
