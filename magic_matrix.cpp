@@ -117,48 +117,48 @@ bool allEqual( int arr[], int N)
     return true;
 }
 
-// bool isPairwiseDistinct( int** matrix, int N) {
-//     bool found = false;
-//     std::unordered_set<int> elementSet;
-//     //----------------------------------------------------------------
-//     // OpenMP here!!!-------------------------------------------------
-//     #pragma omp parallel for collapse(2) schedule(static) shared(found)
-//     for (int i = 0; i < N; i++) {
-//         for (int j = 0; j < N; j++) {
-//             int currentElement = matrix[i][j];
-//             if (elementSet.find(currentElement) != elementSet.end()) {
-//                 found = true;
-//             }
-//         }
-//     }
-//     return found;
-// }
-
 bool isPairwiseDistinct( int** matrix, int N) {
     bool found = false;
+    std::unordered_set<int> elementSet;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) schedule(static)
+    #pragma omp parallel for collapse(2) schedule(static) shared(found)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-            //----------------------------------------------------------------
-            // OpenMP here!!!-------------------------------------------------
-            #pragma omp parallel for collapse(2) schedule(static)
-            for (int row = 0; row < N; row++) {
-                for (int col = 0; col < N; col++) {
-                    if (row != i || col != j) {
-                        int otherElement = matrix[row][col];
-                        if (currentElement == otherElement) {
-                            found = true;
-                        }
-                    }
-                }
+            if (elementSet.find(currentElement) != elementSet.end()) {
+                found = true;
             }
         }
     }
     return found;
 }
+
+//bool isPairwiseDistinct( int** matrix, int N) {
+//    bool found = false;
+//    //----------------------------------------------------------------
+//    // OpenMP here!!!-------------------------------------------------
+//    #pragma omp parallel for collapse(2) schedule(static)
+//    for (int i = 0; i < N; i++) {
+//        for (int j = 0; j < N; j++) {
+//            int currentElement = matrix[i][j];
+//            //----------------------------------------------------------------
+//            // OpenMP here!!!-------------------------------------------------
+//            //#pragma omp parallel for collapse(2) schedule(static)
+//            for (int row = 0; row < N; row++) {
+//                for (int col = 0; col < N; col++) {
+//                    if (row != i || col != j) {
+//                        int otherElement = matrix[row][col];
+//                        if (currentElement == otherElement) {
+//                            found = true;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+//    return found;
+//}
 
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N)
@@ -170,22 +170,65 @@ bool isMagicSquare(int** matrix, int N)
 
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for //reduction(+:main_diag_sum, anti_diag_sum) schedule(static)
+    //#pragma omp parallel for //reduction(+:main_diag_sum, anti_diag_sum) schedule(static)
+    //for (int i = 0; i < N; i++)
+    //{   
+    //    // compute row sums
+    //    row_sums[i] = sumRow(matrix, i, N);
+    //    // compute column sums
+    //    col_sums[i] = sumColumn(matrix, i, N);
+    //     // compute sum of elements on main diagonal
+    //    main_diag_sum += matrix[i][i];
+    //    // compute sum of elements on antidiagonal
+    //    anti_diag_sum += matrix[i][N - 1 - i];
+    //}
+    //int row_sum = row_sums[0];  
+    //if (!allEqual(row_sums, N)) return false;
+    //if (!allEqual(col_sums, N)) return false;
+    //if (main_diag_sum != row_sum) return false;
+    //if (anti_diag_sum != row_sum) return false;
+
+
+    // compute row sums
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for schedule(static)
     for (int i = 0; i < N; i++)
-    {   
-        // compute row sums
+    {
         row_sums[i] = sumRow(matrix, i, N);
-        // compute column sums
+    }
+    if (!allEqual(row_sums, N)) return false;
+
+    int row_sum = row_sums[0];
+
+    // compute column sums
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < N; i++)
+    {
         col_sums[i] = sumColumn(matrix, i, N);
-         // compute sum of elements on main diagonal
+    }
+    if (!allEqual(col_sums, N)) return false;
+
+    // compute sum of elements on main diagonal
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < N; i++)
+    {
         main_diag_sum += matrix[i][i];
-        // compute sum of elements on antidiagonal
+    }
+    if (main_diag_sum != row_sum) return false;
+
+    // compute sum of elements on antidiagonal
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel for schedule(static)
+    for (int i = 0; i < N; i++)
+    {
         anti_diag_sum += matrix[i][N - 1 - i];
     }
-    int row_sum = row_sums[0];  
-    if (!allEqual(row_sums, N)) return false;
-    if (!allEqual(col_sums, N)) return false;
-    if (main_diag_sum != row_sum) return false;
     if (anti_diag_sum != row_sum) return false;
     
     //if(isPairwiseDistinct(matrix, N))
