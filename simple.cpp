@@ -87,52 +87,49 @@ bool allEqual( int arr[], int N)
     return true;
 }
 
-//bool isPairwiseDistinct( int** matrix, int N) {
-//    ////----------------------------------------------------------------
-//    //// OpenMP here!!!-------------------------------------------------
-//    //#pragma omp parallel for collapse(2) schedule(static)
-//    for (int i = 0; i < N; i++) {
-//        for (int j = 0; j < N; j++) {
-//            int currentElement = matrix[i][j];
-//            for (int row = 0; row < N; row++) {
-//                for (int col = 0; col < N; col++) {
-//                    if (row != i || col != j) {
-//                        int otherElement = matrix[row][col];
-//                        if (currentElement == otherElement) {
-//                            return true;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    return false;
-//}
 bool isPairwiseDistinct( int** matrix, int N) {
-    bool found = false;
-    std::unordered_set<int> elementSet;
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) shared(found, elementSet)
+    bool found = false;  
+    ////----------------------------------------------------------------
+    //// OpenMP here!!!-------------------------------------------------
+    //#pragma omp parallel for collapse(2)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-            #pragma omp critical
-            {
-                if (elementSet.find(currentElement) != elementSet.end()) {
-                    found = true;
-                } else {
-                    elementSet.insert(currentElement);
+            for (int row = 0; row < N; row++) {
+                for (int col = 0; col < N; col++) {
+                    if (row != i || col != j) {
+                        int otherElement = matrix[row][col];
+                        if (currentElement == otherElement) {
+                            found = true;
+                        }
+                    }
                 }
-            }
-            if (found) {
-                // Use #pragma omp cancel to break out of the loop
-                #pragma omp cancel for
             }
         }
     }
     return found;
-}  
+}
+//bool isPairwiseDistinct( int** matrix, int N) {
+//    bool found = false;
+//    std::unordered_set<int> elementSet;
+//    //----------------------------------------------------------------
+//    // OpenMP here!!!-------------------------------------------------
+//    #pragma omp parallel for collapse(2) shared(found, elementSet)
+//    for (int i = 0; i < N; i++) {
+//        for (int j = 0; j < N; j++) {
+//            int currentElement = matrix[i][j];
+//            #pragma omp critical
+//            {
+//                if (elementSet.find(currentElement) != elementSet.end()) {
+//                    found = true;
+//                } else {
+//                    elementSet.insert(currentElement);
+//                }
+//            }
+//        }
+//    }
+//    return found;
+//}  
 
 
 // checks if matrix is a magic square
