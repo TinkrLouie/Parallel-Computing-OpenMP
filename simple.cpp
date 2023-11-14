@@ -125,10 +125,10 @@ bool isPairwiseDistinct( int** matrix, int N) {
                     elementSet.insert(currentElement);
                 }
             }
-            //if (found) {
-            //    // Use #pragma omp cancel to break out of the loop
-            //    #pragma omp cancel for
-            //}
+            if (found) {
+                // Use #pragma omp cancel to break out of the loop
+                #pragma omp cancel for
+            }
         }
     }
     return found;
@@ -185,8 +185,6 @@ bool isMagicSquare(int** matrix, int N)
     }
     if (anti_diag_sum != row_sum) return false;
     
-    //if(isPairwiseDistinct(matrix, N))
-	//    return false;
     return !isPairwiseDistinct(matrix, N);
 }
 
