@@ -70,7 +70,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //    }
     //}
 
-    #pragma omp parallel for collapse(2) shared(pattern, modifier, magicSquare)
+    #pragma omp parallel for shared(pattern, modifier, magicSquare)
     for (int i = 0; i < M; i++)
     {
         int patternRow = i % N;
