@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <omp.h>
 #include <unordered_set>
-#define CHUNK_SIZE 32
+#define CHUNK_SIZE 20
 
 // The generateMagicSquare() function is supposed to generate a large matrix square from two smaller ones.
 //
