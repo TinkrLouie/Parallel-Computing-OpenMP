@@ -46,7 +46,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //    }
     //}
 
-    const int blockSize = 16;  // Experiment with different block sizes
+    const int blockSize = 20;  // Experiment with different block sizes
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
     #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier)
