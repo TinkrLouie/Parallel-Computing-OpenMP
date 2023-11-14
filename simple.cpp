@@ -143,47 +143,53 @@ bool isMagicSquare(int** matrix, int N)
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
 
-    // compute row sums
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for
-    for (int i = 0; i < N; i++)
+    #pragma omp parallel 
     {
-        row_sums[i] = sumRow(matrix, i, N);
-    }
-    if (!allEqual(row_sums, N)) return false;
+        // compute row sums
+        //----------------------------------------------------------------
+        // OpenMP here!!!-------------------------------------------------
+        #pragma omp parallel for
+        for (int i = 0; i < N; i++)
+        {
+            row_sums[i] = sumRow(matrix, i, N);
+        }
+        if (!allEqual(row_sums, N)) {
+            #pragma omp critical
+            return false;
+            }
 
-    int row_sum = row_sums[0];
+        int row_sum = row_sums[0];
 
-    // compute column sums
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for
-    for (int i = 0; i < N; i++)
-    {
-        col_sums[i] = sumColumn(matrix, i, N);
-    }
-    if (!allEqual(col_sums, N)) return false;
+        // compute column sums
+        //----------------------------------------------------------------
+        // OpenMP here!!!-------------------------------------------------
+        #pragma omp parallel for
+        for (int i = 0; i < N; i++)
+        {
+            col_sums[i] = sumColumn(matrix, i, N);
+        }
+        if (!allEqual(col_sums, N)) return false;
 
-    // compute sum of elements on main diagonal
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:main_diag_sum)
-    for (int i = 0; i < N; i++)
-    {
-        main_diag_sum += matrix[i][i];
-    }
-    if (main_diag_sum != row_sum) return false;
+        // compute sum of elements on main diagonal
+        //----------------------------------------------------------------
+        // OpenMP here!!!-------------------------------------------------
+        #pragma omp parallel for reduction(+:main_diag_sum)
+        for (int i = 0; i < N; i++)
+        {
+            main_diag_sum += matrix[i][i];
+        }
+        if (main_diag_sum != row_sum) return false;
 
-    // compute sum of elements on antidiagonal
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:anti_diag_sum)
-    for (int i = 0; i < N; i++)
-    {
-        anti_diag_sum += matrix[i][N - 1 - i];
+        // compute sum of elements on antidiagonal
+        //----------------------------------------------------------------
+        // OpenMP here!!!-------------------------------------------------
+        #pragma omp parallel for reduction(+:anti_diag_sum)
+        for (int i = 0; i < N; i++)
+        {
+            anti_diag_sum += matrix[i][N - 1 - i];
+        }
+        if (anti_diag_sum != row_sum) return false;
     }
-    if (anti_diag_sum != row_sum) return false;
     
     //if(isPairwiseDistinct(matrix, N))
 	//    return false;

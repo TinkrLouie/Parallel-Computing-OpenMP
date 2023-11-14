@@ -26,6 +26,7 @@
     0.000058889389038
     0.000077009201050 dynamic, 20 with 400 at freeing memory
     0.000037908554077 (best: 0.000013113021851) no schedule but major changes to isMagicSquare.etc.
+    0.000112056732178 simple file
 
 
 10x10 10x10:
