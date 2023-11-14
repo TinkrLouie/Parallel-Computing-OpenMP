@@ -157,7 +157,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
             }
         }
     }
-    return false;
+    return found;
 }
 
 // checks if matrix is a magic square
