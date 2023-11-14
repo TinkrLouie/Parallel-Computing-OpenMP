@@ -69,13 +69,13 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //}
 
     // VERSION 3
-    //int iOuter, jOuter;
+    int iOuter, jOuter;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
     #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) //private(iOuter, jOuter)
-    for (int iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
+    for (iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
     {
-        for (int jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
+        for (jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
         {   
             //#pragma omp for private(i) schedule(guided)
             //#pragma unroll_and_jam
@@ -128,16 +128,16 @@ int sumColumn( int** matrix, int col, int N)
 // checks if all elements in an array are equal
 bool allEqual( int arr[], int N)
 {   
-    //double aEs, aEe;
-    //aEs = omp_get_wtime();
+    double aEs, aEe;
+    aEs = omp_get_wtime();
     for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
 	{
             return false;
         }
     }
-    //aEe = omp_get_wtime();
-    //printf("allEqual computation time: %.15f\n", aEe - aEs);
+    aEe = omp_get_wtime();
+    printf("allEqual computation time: %.15f\n", aEe - aEs);
     return true;
 }
 
@@ -159,8 +159,8 @@ bool allEqual( int arr[], int N)
 //}
 
 bool isPairwiseDistinct( int** matrix, int N) {
-    //double iPDs, iPDe;
-    //iPDs = omp_get_wtime();
+    double iPDs, iPDe;
+    iPDs = omp_get_wtime();
     bool found = false;
     std::unordered_set<int> elementSet;
     //----------------------------------------------------------------
@@ -179,8 +179,8 @@ bool isPairwiseDistinct( int** matrix, int N) {
             }
         }
     }
-    //iPDe = omp_get_wtime();
-    //printf("isPairwiseDistinct computation time: %.15f\n", iPDe - iPDs);
+    iPDe = omp_get_wtime();
+    printf("isPairwiseDistinct computation time: %.15f\n", iPDe - iPDs);
     return found;
 }  
 
@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
     }
 
     // Timer Init
-    double itime, ftime, exec_time; //gMSe, gMSt, iMSt;
+    double itime, ftime, exec_time, gMSe, gMSt, iMSt;
 
     //int num_teams= omp_get_num_teams(); 
     //int num_threads_per_team = omp_get_num_threads();
@@ -324,7 +324,7 @@ int main(int argc, char *argv[])
     itime = omp_get_wtime();
 
     generateMagicSquare(pattern, modifier, magicSquare, N, M);
-    //gMSe = omp_get_wtime();
+    gMSe = omp_get_wtime();
 
     bool is_magic_square = isMagicSquare(magicSquare, M);
 
@@ -337,11 +337,11 @@ int main(int argc, char *argv[])
 
     // Timer print out
     exec_time = ftime - itime;
-    //gMSt = gMSe - itime;
-    //iMSt = ftime - gMSe;
+    gMSt = gMSe - itime;
+    iMSt = ftime - gMSe;
     
-    //printf("generateMagicSquare computation time: %.15f\n", gMSt);
-    //printf("isMagicSquare computation time: %.15f\n", iMSt);
+    printf("generateMagicSquare computation time: %.15f\n", gMSt);
+    printf("isMagicSquare computation time: %.15f\n", iMSt);
     printf("Total computation time: %.15f\n", exec_time);
     printf("\n");
 
