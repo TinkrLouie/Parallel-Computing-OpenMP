@@ -69,23 +69,23 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //}
 
     // VERSION 3
-    int iOuter, jOuter;
+    int iOuter, jOuter, i, j;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) //private(iOuter, jOuter)
+    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) private(iOuter, jOuter)
     for (iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
     {
         for (jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
         {   
-            //#pragma omp for private(i) schedule(guided)
+            #pragma omp for private(i) schedule(guided)
             //#pragma unroll_and_jam
-            for (int i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
+            for (i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
             {
                 int patternRow = i % N;
                 int modifierRow = i / N;
                 int* patternRowPtr = pattern[patternRow];
                 int* modifierRowPtr = modifier[modifierRow];
-                for (int j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
+                for (j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
                 {
                     int patternCol = j % N;
                     int modifierCol = j / N;
