@@ -124,13 +124,15 @@ int sumColumn( int** matrix, int col, int N)
 
 // checks if all elements in an array are equal
 bool allEqual( int arr[], int N)
-{
+{   
+    double aEs, aEe;
     for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
 	{
             return false;
         }
     }
+    printf("allEqual computation time: %.15f\n", aEe - aEs);
     return true;
 }
 
@@ -328,23 +330,6 @@ int main(int argc, char *argv[])
     // Timer end
     ftime = omp_get_wtime();
 
-    // Print first 3 and last 3 elements of generated and checked matrix 
-    for (int i = 0; i < 3; i++)
-    {
-        printf("%d ", magicSquare[i][0]);
-    }
-
-    printf("... \n . \n . \n . \n");
-
-    for (int j = M-3; j < M; j++)
-    {
-        printf("%d ", magicSquare[M-1][j]);
-    }
-
-    printf("\n");
-    if(is_magic_square) printf("Generated matrix is a magic square.\n");
-    else                printf("Generated matrix is not a magic square.\n");
-
     // Timer print out
     exec_time = ftime - itime;
     gMSt = gMSe - itime;
@@ -353,6 +338,20 @@ int main(int argc, char *argv[])
     printf("generateMagicSquare computation time: %.15f\n", gMSt);
     printf("isMagicSquare computation time: %.15f\n", iMSt);
     printf("Total computation time: %.15f\n", exec_time);
+
+    // Print first 3 and last 3 elements of generated and checked matrix 
+    for (int i = 0; i < 3; i++)
+    {
+        printf("%d ", magicSquare[i][0]);
+    }
+    printf("... \n . \n . \n . \n");
+    for (int j = M-3; j < M; j++)
+    {
+        printf("%d ", magicSquare[M-1][j]);
+    }
+    printf("\n");
+    if(is_magic_square) printf("Generated matrix is a magic square.\n");
+    else                printf("Generated matrix is not a magic square.\n");
 
     // CAN TRY TO PARALLEL
     // free dynamically allocated memory
