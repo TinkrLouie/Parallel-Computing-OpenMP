@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <omp.h>
 #include <unordered_set>
+#define CHUNK_SIZE 8192
 
 // The generateMagicSquare() function is supposed to generate a large matrix square from two smaller ones.
 //
@@ -68,21 +69,21 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //}
 
     // VERSION 3
-    const int blockSize = 32;  // Experiment with different block sizes
+    int iOuter, jOuter;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
     #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) private(iOuter, jOuter)
-    for (int iOuter = 0; iOuter < M; iOuter += blockSize)
+    for (iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
     {
-        for (int jOuter = 0; jOuter < M; jOuter += blockSize)
+        for (jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
         {
-            for (int i = iOuter; i < iOuter + blockSize && i < M; i++)
+            for (int i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
             {
                 int patternRow = i % N;
                 int modifierRow = i / N;
                 int* patternRowPtr = pattern[patternRow];
                 int* modifierRowPtr = modifier[modifierRow];
-                for (int j = jOuter; j < jOuter + blockSize && j < M; j++)
+                for (int j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
                 {
                     int patternCol = j % N;
                     int modifierCol = j / N;
