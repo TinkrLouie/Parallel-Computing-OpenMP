@@ -46,15 +46,15 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //        {
     //            int patternRow = i % N;
     //            int modifierRow = i / N;
-//
+
     //            int* patternRowPtr = pattern[patternRow];
     //            int* modifierRowPtr = modifier[modifierRow];
-//
+
     //            for (int j = jOuter; j < jOuter + blockSize && j < M; j++)
     //            {
     //                int patternCol = j % N;
     //                int modifierCol = j / N;
-//
+
     //                magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
     //            }
     //        }
@@ -117,21 +117,46 @@ bool allEqual( int arr[], int N)
     return true;
 }
 
+// bool isPairwiseDistinct( int** matrix, int N) {
+//     bool found = false;
+//     std::unordered_set<int> elementSet;
+//     //----------------------------------------------------------------
+//     // OpenMP here!!!-------------------------------------------------
+//     #pragma omp parallel for collapse(2) schedule(static) shared(found)
+//     for (int i = 0; i < N; i++) {
+//         for (int j = 0; j < N; j++) {
+//             int currentElement = matrix[i][j];
+//             if (elementSet.find(currentElement) != elementSet.end()) {
+//                 found = true;
+//             }
+//         }
+//     }
+//     return found;
+// }
+
 bool isPairwiseDistinct( int** matrix, int N) {
-    bool found = false;
-    std::unordered_set<int> elementSet;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) schedule(static) shared(found)
+    #pragma omp parallel for collapse(2) schedule(static)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-            if (elementSet.find(currentElement) != elementSet.end()) {
-                found = true;
+            //----------------------------------------------------------------
+            // OpenMP here!!!-------------------------------------------------
+            #pragma omp parallel for collapse(2) schedule(static)
+            for (int row = 0; row < N; row++) {
+                for (int col = 0; col < N; col++) {
+                    if (row != i || col != j) {
+                        int otherElement = matrix[row][col];
+                        if (currentElement == otherElement) {
+                            return true;
+                        }
+                    }
+                }
             }
         }
     }
-    return found;
+    return false;
 }
 
 // checks if matrix is a magic square
