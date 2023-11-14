@@ -117,14 +117,14 @@ bool isPairwiseDistinct( int** matrix, int N) {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-            #pragma omp critical
-            {
-                if (elementSet.find(currentElement) != elementSet.end()) {
-                    found = true;
-                } else {
-                    elementSet.insert(currentElement);
-                }
+            //#pragma omp critical
+            
+            if (elementSet.find(currentElement) != elementSet.end()) {
+                found = true;
+            } else {
+                elementSet.insert(currentElement);
             }
+            
             //if (found) {
             //    // Use #pragma omp cancel to break out of the loop
             //    #pragma omp cancel for
