@@ -152,6 +152,8 @@ bool allEqual( int arr[], int N)
 //}
 
 bool isPairwiseDistinct( int** matrix, int N) {
+    double iPDs, iPDe;
+    iPDs = omp_get_wtime();
     bool found = false;
     std::unordered_set<int> elementSet;
     //----------------------------------------------------------------
@@ -170,6 +172,8 @@ bool isPairwiseDistinct( int** matrix, int N) {
             }
         }
     }
+    iPDe = omp_get_wtime();
+    printf("isPairwiseDistinct computation time: %.15f\n", iPDe - iPDs);
     return found;
 }  
 
