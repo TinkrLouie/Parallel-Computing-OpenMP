@@ -143,32 +143,6 @@ bool isPairwiseDistinct( int** matrix, int N) {
     return found;
 }   
 
-//bool isPairwiseDistinct( int** matrix, int N) {
-//    bool found = false;
-//    //----------------------------------------------------------------
-//    // OpenMP here!!!-------------------------------------------------
-//    #pragma omp parallel for collapse(2) schedule(static)
-//    for (int i = 0; i < N; i++) {
-//        for (int j = 0; j < N; j++) {
-//            int currentElement = matrix[i][j];
-//            //----------------------------------------------------------------
-//            // OpenMP here!!!-------------------------------------------------
-//            //#pragma omp parallel for collapse(2) schedule(static)
-//            for (int row = 0; row < N; row++) {
-//                for (int col = 0; col < N; col++) {
-//                    if (row != i || col != j) {
-//                        int otherElement = matrix[row][col];
-//                        if (currentElement == otherElement) {
-//                            found = true;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//    return found;
-//}
-
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N)
 {
