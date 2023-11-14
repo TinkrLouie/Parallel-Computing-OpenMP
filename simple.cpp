@@ -69,32 +69,61 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //}
 
     // VERSION 3
-    int iOuter, jOuter, i, j;
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) private(iOuter, jOuter)
-    for (iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
-    {
-        for (jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
-        {   
-            #pragma omp for private(i) schedule(guided)
-            //#pragma unroll_and_jam
-            for (i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
-            {
-                int patternRow = i % N;
-                int modifierRow = i / N;
-                int* patternRowPtr = pattern[patternRow];
-                int* modifierRowPtr = modifier[modifierRow];
-                for (j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
-                {
-                    int patternCol = j % N;
-                    int modifierCol = j / N;
-                    magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
-                }
+    //int iOuter, jOuter;
+    ////----------------------------------------------------------------
+    //// OpenMP here!!!-------------------------------------------------
+    //#pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) private(iOuter, jOuter)
+    //for (iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
+    //{
+    //    for (jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
+    //    {   
+    //        int i;
+    //        #pragma omp for private(i) schedule(guided)
+    //        #pragma unroll_and_jam (4)
+    //        for (i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
+    //        {
+    //            int patternRow = i % N;
+    //            int modifierRow = i / N;
+    //            int* patternRowPtr = pattern[patternRow];
+    //            int* modifierRowPtr = modifier[modifierRow];
+    //            int j;
+    //            for (j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
+    //            {
+    //                int patternCol = j % N;
+    //                int modifierCol = j / N;
+    //                magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
+    //            }
+    //        }
+    //    }
+    //}
+
+    // VERSION 4
+    int body_start_index;
+    ////----------------------------------------------------------------
+    //// OpenMP here!!!-------------------------------------------------
+    #pragma omp parallel private(body_start_index)
+    for(body_start_index = 0; body_start_index < M; body_start_index += CHUNK_SIZE) {
+        int i;
+        int body_end_index = body_start_index + CHUNK_SIZE;
+
+        ////----------------------------------------------------------------
+        //// OpenMP here!!!-------------------------------------------------
+        #pragma omp for private(i) schedule(guided)
+        #pragma unroll_and_jam (4)
+        for(i = body_start_index; i < body_end_index; i++) {
+            int j;
+            int patternRow = i % N;
+            int modifierRow = i / N;
+            int* patternRowPtr = pattern[patternRow];
+            int* modifierRowPtr = modifier[modifierRow];
+            for(j = body_start_index; j<body_end_index; j++) {
+                int patternCol = j % N;
+                int modifierCol = j / N;
+                magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
             }
+    
         }
     }
-    
 }
 
 // computes sum of elements in a row
