@@ -46,27 +46,45 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //    }
     //}
 
-    const int blockSize = 32;  // Experiment with different block sizes
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier)
-    for (int iOuter = 0; iOuter < M; iOuter += blockSize)
+    //const int blockSize = 32;  // Experiment with different block sizes
+    ////----------------------------------------------------------------
+    //// OpenMP here!!!-------------------------------------------------
+    //#pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier)
+    //for (int iOuter = 0; iOuter < M; iOuter += blockSize)
+    //{
+    //    for (int jOuter = 0; jOuter < M; jOuter += blockSize)
+    //    {
+    //        for (int i = iOuter; i < iOuter + blockSize && i < M; i++)
+    //        {
+    //            int patternRow = i % N;
+    //            int modifierRow = i / N;
+    //            int* patternRowPtr = pattern[patternRow];
+    //            int* modifierRowPtr = modifier[modifierRow];
+    //            for (int j = jOuter; j < jOuter + blockSize && j < M; j++)
+    //            {
+    //                int patternCol = j % N;
+    //                int modifierCol = j / N;
+    //                magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
+    //            }
+    //        }
+    //    }
+    //}
+
+    #pragma omp parallel for collapse(2) shared(pattern, modifier, magicSquare)
+    for (int i = 0; i < M; i++)
     {
-        for (int jOuter = 0; jOuter < M; jOuter += blockSize)
+        int patternRow = i % N;
+        int modifierRow = i / N;
+
+        int* patternRowPtr = pattern[patternRow];
+        int* modifierRowPtr = modifier[modifierRow];
+
+        for (int j = 0; j < M; j++)
         {
-            for (int i = iOuter; i < iOuter + blockSize && i < M; i++)
-            {
-                int patternRow = i % N;
-                int modifierRow = i / N;
-                int* patternRowPtr = pattern[patternRow];
-                int* modifierRowPtr = modifier[modifierRow];
-                for (int j = jOuter; j < jOuter + blockSize && j < M; j++)
-                {
-                    int patternCol = j % N;
-                    int modifierCol = j / N;
-                    magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
-                }
-            }
+            int patternCol = j % N;
+            int modifierCol = j / N;
+
+            magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
         }
     }
 }
