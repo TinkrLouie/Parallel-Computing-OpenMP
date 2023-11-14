@@ -14,7 +14,8 @@
     0.236486911773682 with target teams loop
     0.007000207901001 with optimised generateMagicSquare
     0.009648799896240 if is magic matrix, 0.001686096191406 if not
-    
+    49.149247884750366 simple one
+
     
 
 
