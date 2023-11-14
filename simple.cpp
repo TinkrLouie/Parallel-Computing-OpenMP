@@ -128,16 +128,16 @@ int sumColumn( int** matrix, int col, int N)
 // checks if all elements in an array are equal
 bool allEqual( int arr[], int N)
 {   
-    double aEs, aEe;
-    aEs = omp_get_wtime();
+    //double aEs, aEe;
+    //aEs = omp_get_wtime();
     for (int i = 0; i < N; i++){
         if (arr[0] != arr[i])
 	{
             return false;
         }
     }
-    aEe = omp_get_wtime();
-    printf("allEqual computation time: %.15f\n", aEe - aEs);
+    //aEe = omp_get_wtime();
+    //printf("allEqual computation time: %.15f\n", aEe - aEs);
     return true;
 }
 
@@ -159,8 +159,8 @@ bool allEqual( int arr[], int N)
 //}
 
 bool isPairwiseDistinct( int** matrix, int N) {
-    double iPDs, iPDe;
-    iPDs = omp_get_wtime();
+    //double iPDs, iPDe;
+    //iPDs = omp_get_wtime();
     bool found = false;
     std::unordered_set<int> elementSet;
     //----------------------------------------------------------------
@@ -179,8 +179,8 @@ bool isPairwiseDistinct( int** matrix, int N) {
             }
         }
     }
-    iPDe = omp_get_wtime();
-    printf("isPairwiseDistinct computation time: %.15f\n", iPDe - iPDs);
+    //iPDe = omp_get_wtime();
+    //printf("isPairwiseDistinct computation time: %.15f\n", iPDe - iPDs);
     return found;
 }  
 
