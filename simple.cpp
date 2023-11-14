@@ -71,7 +71,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     const int blockSize = 32;  // Experiment with different block sizes
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier)
+    #pragma omp parallel for collapse(2) //shared(magicSquare, pattern, modifier)
     for (int iOuter = 0; iOuter < M; iOuter += blockSize)
     {
         for (int jOuter = 0; jOuter < M; jOuter += blockSize)
@@ -341,7 +341,7 @@ int main(int argc, char *argv[])
     printf("isMagicSquare computation time: %.15f\n", iMSt);
     printf("Total computation time: %.15f\n", exec_time);
     printf("\n");
-    
+
     // Print first 3 and last 3 elements of generated and checked matrix 
     for (int i = 0; i < 3; i++)
     {
