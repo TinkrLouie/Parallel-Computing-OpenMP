@@ -8,4 +8,4 @@ $(TARGET): simple.cpp
     $(CC) $(CFLAGS) $^ -o $@
 
 clean:
-    rm -f $(TARGET)
+    rm -rf *$(TARGET)
