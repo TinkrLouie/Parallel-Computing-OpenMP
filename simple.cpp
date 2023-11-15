@@ -98,7 +98,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     ////----------------------------------------------------------------
     //// OpenMP here!!!-------------------------------------------------
     #pragma omp parallel private(body_start_index) shared(magicSquare, pattern, modifier)
-    for(body_start_index = 0; body_start_index < M; body_start_index += CHUNK_SIZE) {
+    for(body_start_index = 0; body_start_index < M - CHUNK_SIZE; body_start_index += CHUNK_SIZE) {
         int i;
         int body_end_index = body_start_index + CHUNK_SIZE;
         ////----------------------------------------------------------------
