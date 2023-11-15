@@ -6,14 +6,11 @@ FLAGS = -fopenmp -mp=gpu
 SHELL:=/bin/bash
 
 all: 
-	module
+	module load nvidia-hpc
 	build
 
 clean:
 	rm -rf build
-
-module:
-	module load nvidia-hpc
 
 build:
 	$(CC) $(FLAGS) $(SRC) -o $(OUT)
