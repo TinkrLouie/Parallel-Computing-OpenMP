@@ -4,11 +4,10 @@ CC = nvc++
 FLAGS = -fopenmp -mp=gpu
 
 all:
-	module load nvidia-hpc
 	$(CC) $(FLAGS) $(SRC) -o $(OUT)
 
 clean:
 	rm -rf $(OUT)
 
-install:
+load:
 	module load nvidia-hpc
