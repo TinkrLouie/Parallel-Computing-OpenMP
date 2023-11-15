@@ -5,7 +5,9 @@ CC = nvc++
 FLAGS = -fopenmp -mp=gpu
 SHELL:=/bin/bash
 
-all: build
+all: 
+	module
+	build
 
 clean:
 	rm -rf build
