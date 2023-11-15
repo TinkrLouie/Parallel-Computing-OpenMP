@@ -406,5 +406,5 @@ int main(int argc, char *argv[])
     delete[] modifier;
     
     end = omp_get_wtime();
-    printf("Total runtime: %.15f", end - start);
+    printf("Total runtime: %.15f\n", end - start);
 }
