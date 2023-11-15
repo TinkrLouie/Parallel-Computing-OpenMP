@@ -135,7 +135,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
                 }
             }
             //if (found) {
-            //    // Use #pragma omp cancel to break out of the loop
+            //    //To break out of the loop
             //    #pragma omp cancel for
             //}
         }
