@@ -6,8 +6,10 @@ FLAGS = -fopenmp -mp=gpu
 SHELL:=/bin/bash
 
 all: 
-	module load nvidia-hpc
 	$(CC) $(FLAGS) $(SRC) -o $(OUT)
 
 clean:
 	rm -rf $(OUT)
+
+install:
+	module load nvidia-hpc
