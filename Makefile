@@ -1,12 +1,15 @@
-CC = nvc++
-CFLAGS = -fopenmp -mp=gpu
-TARGET = simple
+OBJS	= magic_matrix.o
+SOURCE	= magic_matrix.cpp
+OUT	= magic_matrix
+CC	 = nvc++
+FLAGS	 = -fopenmp -mp=gpu
 
-all: $(TARGET)
+all: $(OBJS)
+	$(CC) -g $(OBJS) -o $(OUT)
 
-$(TARGET): simple.cpp
-    $(CC) $(CFLAGS) $(TARGET) -o simple.cpp
+magic_matrix.o: magic_matrix.cpp
+	$(CC) $(FLAGS) magic_matrix.cpp 
+
 
 clean:
-    rm -rf *$(TARGET)
-
+	rm -f $(OBJS) $(OUT)
