@@ -146,7 +146,9 @@ int main(int argc, char *argv[])
     }
 
     // Timer Init
-    double itime, ftime, exec_time;
+    double itime, ftime, exec_time, start, end;
+
+    start = omp_get_wtime();
 
     int num_teams= omp_get_num_teams(); 
     int num_threads_per_team = omp_get_num_threads();
@@ -266,4 +268,7 @@ int main(int argc, char *argv[])
     }
     delete[] pattern;
     delete[] modifier;
+
+    end = omp_get_wtime();
+    printf("Total runtime: %.15f\n", end - start);
 }
