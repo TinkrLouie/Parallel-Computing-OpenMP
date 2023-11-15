@@ -110,7 +110,6 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
             int row = i % N;
             int* patternRowPtr = pattern[row];
             int* modifierRowPtr = modifier[row];
-            #pragma omp for private(j) schedule(guided)
             for(j = body_start_index; j < body_end_index; j++) {
                 int col = j % N;
                 magicSquare[i][j] = patternRowPtr[col] + modifierRowPtr[col];
