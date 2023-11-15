@@ -72,7 +72,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     int iOuter, jOuter;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) private(iOuter, jOuter)
+    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) //private(iOuter, jOuter)
     for (iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
     {
         for (jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
@@ -120,7 +120,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //
     //    }
     //}
-    printf("Bonk 2\n");
+    //printf("Bonk 2\n");
 }
 
 // computes sum of elements in a row
