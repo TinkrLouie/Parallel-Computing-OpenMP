@@ -1,8 +1,9 @@
-OBJS	= magic_matrix.o
+OBJS = magic_matrix.o
 SRC	= magic_matrix.cpp
 OUT	= magic_matrix
-CC	 = nvc++
-FLAGS	 = -fopenmp -mp=gpu
+CC = nvc++
+FLAGS = -fopenmp -mp=gpu
+SHELL:=/bin/bash
 
 all:
 	module load nvidia-hpc
