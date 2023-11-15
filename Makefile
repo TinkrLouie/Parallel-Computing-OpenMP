@@ -3,7 +3,8 @@ OUT	= magic_matrix_gpu
 CC = nvc++
 FLAGS = -fopenmp -mp=gpu
 
-all: 
+all:
+	module load nvidia-hpc
 	$(CC) $(FLAGS) $(SRC) -o $(OUT)
 
 clean:
