@@ -7,7 +7,7 @@ SHELL:=/bin/bash
 
 all:
 	module load nvidia-hpc
-	$(CC) $(FLAGS) $(OUT) -o $(SRC)
+	$(CC) $(FLAGS) $(SRC) -o $(OUT)
 
 clean:
 	rm -f $(OUT)
