@@ -5,7 +5,8 @@ TARGET = simple
 all: $(TARGET)
 
 $(TARGET): simple.cpp
-    $(CC) $(CFLAGS) $^ -o $@
+    $(CC) $(CFLAGS) $(TARGET) -o simple.cpp
 
 clean:
     rm -rf *$(TARGET)
+
