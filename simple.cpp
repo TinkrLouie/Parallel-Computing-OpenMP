@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <omp.h>
 #include <unordered_set>
-#define CHUNK_SIZE 20
+#define CHUNK_SIZE 32
 
 // The generateMagicSquare() function is supposed to generate a large matrix square from two smaller ones.
 //
@@ -270,7 +270,9 @@ int main(int argc, char *argv[])
     }
 
     // Timer Init
-    double itime, ftime, exec_time, gMSe, gMSt, iMSt;
+    double itime, ftime, exec_time, gMSe, gMSt, iMSt, start, end;
+
+    start = omp_get_wtime();
 
     //int num_teams= omp_get_num_teams(); 
     //int num_threads_per_team = omp_get_num_threads();
@@ -402,4 +404,7 @@ int main(int argc, char *argv[])
     }
     delete[] pattern;
     delete[] modifier;
+    
+    end = omp_get_wtime();
+    printf("Total runtime: %.15f", end - start);
 }
