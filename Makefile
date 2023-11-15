@@ -7,16 +7,7 @@ SHELL:=/bin/bash
 
 all: 
 	module load nvidia-hpc
-	build
-
-clean:
-	rm -rf build
-
-build:
 	$(CC) $(FLAGS) $(SRC) -o $(OUT)
 
-run_20:
-	./magic_matrix_gpu ./data_sets/pattern20x20.dat ./data_sets/modifier20x20.dat
-
-run_10:
-	./magic_matrix_gpu ./data_sets/pattern10x10.dat ./data_sets/modifier10x10.dat
+clean:
+	rm -rf $(OUT)
