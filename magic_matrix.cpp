@@ -141,9 +141,9 @@ bool isMagicSquare(int** matrix, int N)
 
     if (anti_diag_sum != row_sum) return false;
     
-    printf("sumRow computation time: %.15f", (n2 - n1)/N);
-    printf("sumColumn computation time: %.15f", (n4 - n3)/N);
-    printf("isEqual computation time: %.15f", (n3 - n2)/N);
+    printf("sumRow computation time: %.15f\n", (n2 - n1)/N);
+    printf("sumColumn computation time: %.15f\n", (n4 - n3)/N);
+    printf("isEqual computation time: %.15f\n", (n3 - n2)/N);
 
     if(isPairwiseDistinct(matrix, N))
 	    return false;
@@ -159,7 +159,7 @@ int main(int argc, char *argv[])
     }
 
     // Timer Init
-    double itime, ftime, exec_time, gMSe;
+    double itime, ftime, gMSe;
 
     FILE *pattern_file = fopen(argv[1], "r");
     FILE *modifier_file = fopen(argv[2], "r");
