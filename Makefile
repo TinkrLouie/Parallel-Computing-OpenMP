@@ -2,15 +2,17 @@ SRC	= magic_matrix_gpu.cpp
 OUT	= magic_matrix_gpu
 CC = nvc++
 FLAGS = -fopenmp -mp=gpu
+LOAD = load.sh
 
 all: build
 
 build:
-	module load nvidia-hpc && \
 	$(CC) $(FLAGS) $(SRC) -o $(OUT)
+
+load:
+	chmod +x $(LOAD)
+	./$(LOAD)
 
 clean:
 	rm -rf $(OUT) 
 
-clean_sh:
-	rm install_numact1.sh
