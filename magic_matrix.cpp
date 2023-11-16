@@ -76,6 +76,8 @@ bool allEqual( int arr[], int N)
 }
 
 bool isPairwiseDistinct( int** matrix, int N) {
+    double s, e;
+    s = omp_get_wtime();
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
@@ -91,6 +93,8 @@ bool isPairwiseDistinct( int** matrix, int N) {
             }
         }
     }
+    e = omp_get_wtime();
+    printf("isPairwiseDistinct computation time: %.15f\n", e - s);
     return false;
 }
 
