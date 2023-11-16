@@ -10,7 +10,7 @@ build:
 	$(CC) $(FLAGS) $(SRC) -o $(OUT)
 
 load:
-	chmod +x $(LOAD)
+	chmod +x $(LOAD) && \
 	./$(LOAD)
 
 clean:
