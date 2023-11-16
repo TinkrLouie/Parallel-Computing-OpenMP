@@ -225,7 +225,7 @@ bool isMagicSquare(int** matrix, int N)
     // compute column sums
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for schedule(guided)
+    #pragma omp parallel for schedule(guided) shared(colFlag)
     for (int i = 0; i < N; i++)
     {
         double s, e;
