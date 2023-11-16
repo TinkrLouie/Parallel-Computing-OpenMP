@@ -96,26 +96,31 @@ bool isPairwiseDistinct( int** matrix, int N) {
 
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N)
-{
+{   
+    double n1, n2, n3, n4;
     int row_sums[N];
     int col_sums[N];
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
 
+    n1 = omp_get_wtime();
     // compute row sums
     for (int i = 0; i < N; i++)
     {
         row_sums[i] = sumRow(matrix, i, N);
     }
+    n2 = omp_get_wtime();
+
     if (!allEqual(row_sums, N)) return false;
 
-    int row_sum = row_sums[0];
-
+    n3 = omp_get_wtime();
     // compute column sums
     for (int i = 0; i < N; i++)
     {
         col_sums[i] = sumColumn(matrix, i, N);
     }
+    n4 = omp_get_wtime();
+
     if (!allEqual(col_sums, N)) return false;
 
     // compute sum of elements on main diagonal
@@ -123,6 +128,9 @@ bool isMagicSquare(int** matrix, int N)
     {
         main_diag_sum += matrix[i][i];
     }
+
+    int row_sum = row_sums[0];
+
     if (main_diag_sum != row_sum) return false;
 
     // compute sum of elements on antidiagonal
@@ -130,8 +138,13 @@ bool isMagicSquare(int** matrix, int N)
     {
         anti_diag_sum += matrix[i][N - 1 - i];
     }
+
     if (anti_diag_sum != row_sum) return false;
     
+    printf("sumRow computation time: %.15f", (n2 - n1)/N);
+    printf("sumColumn computation time: %.15f", (n4 - n3)/N);
+    printf("isEqual computation time: %.15f", (n3 - n2)/N);
+
     if(isPairwiseDistinct(matrix, N))
 	    return false;
     return true;
