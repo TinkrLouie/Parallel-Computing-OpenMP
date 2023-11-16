@@ -146,16 +146,7 @@ int main(int argc, char *argv[])
     }
 
     // Timer Init
-    double itime, ftime, exec_time, start, end;
-
-    start = omp_get_wtime();
-
-    int num_teams= omp_get_num_teams(); 
-    int num_threads_per_team = omp_get_num_threads();
-    printf("Running on GPU with %d teams and %d threads per team\n", 
-      num_teams, 
-      num_threads_per_team
-    );
+    double itime, ftime, exec_time, gMSe;
 
     FILE *pattern_file = fopen(argv[1], "r");
     FILE *modifier_file = fopen(argv[2], "r");
@@ -224,6 +215,8 @@ int main(int argc, char *argv[])
 
     generateMagicSquare(pattern, modifier, magicSquare, N, M);
 
+    gMSe = omp_get_wtime();
+
     bool is_magic_square = isMagicSquare(magicSquare, M);
 
     //-------------------------------------//
@@ -232,6 +225,12 @@ int main(int argc, char *argv[])
 
     // Timer end
     ftime = omp_get_wtime();
+
+    // Timer print out
+    printf("\n");
+    printf("generateMagicMatrix computation time: %.15f\n", gMSe - itime);
+    printf("isMagicSquare computation time: %.15f\n", ftime - gMSe);
+    printf("Total computation time: %.15f\n", ftime - itime);
 
     // Print first 3 and last 3 elements of generated and checked matrix 
     for (int i = 0; i < 3; i++)
@@ -250,11 +249,6 @@ int main(int argc, char *argv[])
     if(is_magic_square) printf("Generated matrix is a magic square.\n");
     else                printf("Generated matrix is not a magic square.\n");
 
-    // Timer print out
-    exec_time = ftime - itime;
-    printf("\n");
-    printf("Total computation time: %.15f\n", exec_time);
-
     // CAN TRY TO PARALLEL
     // free dynamically allocated memory
     for (int i = 0; i < M; i++) {
@@ -268,7 +262,4 @@ int main(int argc, char *argv[])
     }
     delete[] pattern;
     delete[] modifier;
-
-    end = omp_get_wtime();
-    printf("Total runtime: %.15f\n", end - start);
 }
