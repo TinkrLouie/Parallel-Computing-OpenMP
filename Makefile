@@ -8,10 +8,10 @@ SHELL := !/bin/bash
 all: load build
 
 load:
-	source $(MODULE_SCRIPT)
+	. $(MODULE_SCRIPT)
 
 build:
 	$(CC) $(FLAGS) $(SRC) -o $(OUT)
-	
+
 clean:
 	rm -rf $(OUT)
