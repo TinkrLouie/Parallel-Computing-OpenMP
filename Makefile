@@ -12,7 +12,8 @@ build:
 	$(CC) $(FLAGS) $(SRC) -o $(OUT)
 
 load:
-	source ./$(LOAD)
+	chmod +x ./$(LOAD)
+	./$(LOAD)
 
 clean:
 	rm -rf $(OUT) 
