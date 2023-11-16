@@ -3,7 +3,8 @@ OUT	= magic_matrix_gpu
 CC = nvc++
 FLAGS = -fopenmp -mp=gpu
 LOAD = load.sh
-SH = /bin/bash
+SHELL = /bin/bash
+MOD = nvidia-hpc
 
 all: build
 
