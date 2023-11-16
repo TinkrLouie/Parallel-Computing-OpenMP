@@ -10,4 +10,7 @@ build:
 	$(CC) $(FLAGS) $(SRC) -o $(OUT)
 
 clean:
-	rm -rf $(OUT)
+	rm -rf $(OUT) 
+
+clean_sh:
+	rm install_numact1.sh
