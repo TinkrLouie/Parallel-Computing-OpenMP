@@ -6,7 +6,7 @@ FLAGS = -fopenmp -mp=gpu
 all: build
 
 build:
-	module load nvidia-hpc \
+	module load nvidia-hpc && \
 	$(CC) $(FLAGS) $(SRC) -o $(OUT)
 
 clean:
