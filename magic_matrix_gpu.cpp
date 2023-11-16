@@ -18,7 +18,8 @@
 //    such that the resulting matrix consists of N*N "pattern" blocks.
 // 3. For all pattern blocks:
 //      Multiply all elements in the "pattern" block[i][j] with the element at modifier[i][j]. 
-//
+
+
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
     //----------------------------------------------------------------
@@ -152,6 +153,7 @@ bool allEqual( int arr[], int N)
     printf("allEqual computation time: %.15f\n", aEe - aEs);
     return true;
 }
+
 //bool allEqual(int arr[], int N) {
 //    bool result = true;
 //
@@ -168,6 +170,7 @@ bool allEqual( int arr[], int N)
 //
 //    return result;
 //}
+
 bool isPairwiseDistinct( int** matrix, int N) {
     double iPDs, iPDe;
     iPDs = omp_get_wtime();
@@ -200,13 +203,22 @@ bool isMagicSquare(int** matrix, int N)
     int col_sums[N];
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
+    int rowFlag = 0;
+    int colFlag = 0;
     // compute row sums
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for schedule(guided)
+    #pragma omp parallel for schedule(guided) shared(rowFlag)
     for (int i = 0; i < N; i++)
-    {
+    {   
+        double s, e;
+        s = omp_get_wtime();
         row_sums[i] = sumRow(matrix, i, N);
+        e = omp_get_wtime();
+        if (rowFlag == 0) {
+            printf("sumRow computation time: %.15f", e - s);
+            ++rowFlag;
+        }
     }
     if (!allEqual(row_sums, N)) return false;
     int row_sum = row_sums[0];
@@ -216,7 +228,13 @@ bool isMagicSquare(int** matrix, int N)
     #pragma omp parallel for schedule(guided)
     for (int i = 0; i < N; i++)
     {
+        double s, e;
+        s = omp_get_wtime();
         col_sums[i] = sumColumn(matrix, i, N);
+        if (colFlag == 0) {
+            printf("sumColumn computation time: %.15f", e - s);
+            ++colFlag;
+        }
     }
     if (!allEqual(col_sums, N)) return false;
     // compute sum of elements on main diagonal
