@@ -5,8 +5,10 @@ set -eu -o pipefail # fail on error and report it, debug all lines
 # Set the version of numactl to install
 NUMACTL_VERSION="2.0.16"
 
+TARGET="numact1"
+
 # Set the installation directory in your home directory
-INSTALL_DIR="$HOME"
+INSTALL_DIR="$HOME/$TARGET"
 
 read -p "This script will install numactl version $NUMACTL_VERSION in $INSTALL_DIR. Continue? (y/n): " choice
 
@@ -34,7 +36,7 @@ if [[ $choice =~ ^[Yy]$ ]]; then
     make && make install
 
     # Clean up temporary files
-    cd "home2/nlzl16" || exit
+    cd "$HOME" || exit
     rm -rf "$TEMP_DIR"
 
     echo "Numactl version ${NUMACTL_VERSION} has been installed in $INSTALL_DIR"
