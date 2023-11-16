@@ -6,7 +6,7 @@ set -eu -o pipefail # fail on error and report it, debug all lines
 NUMACTL_VERSION="2.0.16"
 
 # Set the installation directory in your home directory
-INSTALL_DIR="home2/nlzl16"
+INSTALL_DIR="$HOME/nlzl16"
 
 read -p "This script will install numactl version $NUMACTL_VERSION in $INSTALL_DIR. Continue? (y/n): " choice
 
