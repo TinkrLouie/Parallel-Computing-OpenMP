@@ -304,7 +304,6 @@ int main(int argc, char *argv[])
     // Timer Init
     itime = omp_get_wtime();
     generateMagicSquare(pattern, modifier, magicSquare, N, M);
-    gMSe = omp_get_wtime();
     bool is_magic_square = isMagicSquare(magicSquare, M);
     //-------------------------------------//
     //BOOL FOR DETERMINING MAGIC SQUARE----//
