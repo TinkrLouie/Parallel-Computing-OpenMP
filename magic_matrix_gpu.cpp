@@ -231,6 +231,7 @@ bool isMagicSquare(int** matrix, int N)
         double s, e;
         s = omp_get_wtime();
         col_sums[i] = sumColumn(matrix, i, N);
+        e = omp_get_wtime();
         if (colFlag == 0) {
             printf("sumColumn computation time: %.15f\n", e - s);
             ++colFlag;
