@@ -12,8 +12,6 @@ build:
 
 load:
 	source ./$(LOAD)
-	#chmod +x $(LOAD) && \
-	#./$(LOAD)
 
 clean:
 	rm -rf $(OUT) 
