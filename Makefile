@@ -5,8 +5,13 @@ FLAGS = -fopenmp -mp=gpu
 MODULE_SCRIPT = load_modules.sh
 SHELL := !/bin/bash
 
-all:
-	source $(MODULE_SCRIPT) && $(CC) $(FLAGS) $(SRC) -o $(OUT)
+all: load build
 
+load:
+	source $(MODULE_SCRIPT)
+
+build:
+	$(CC) $(FLAGS) $(SRC) -o $(OUT)
+	
 clean:
 	rm -rf $(OUT)
