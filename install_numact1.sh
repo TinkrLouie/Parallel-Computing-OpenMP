@@ -28,6 +28,9 @@ if [[ $choice =~ ^[Yy]$ ]]; then
     #./configure --prefix="$INSTALL_PATH"
     #make && make install
 
+    # Capture the output of numactl -H in numactl.out
+    numactl -H > "$INSTALL_DIR/numactl.out"
+
     cd "$HOME" || exit
     rm -rf "$TEMP_DIR"
     echo -e
