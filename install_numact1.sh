@@ -37,3 +37,5 @@ if [[ $choice =~ ^[Yy]$ ]]; then
 else
     echo "Installation failed."
 fi
+
+exit 0
