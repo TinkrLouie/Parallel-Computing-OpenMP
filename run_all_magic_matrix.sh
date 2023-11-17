@@ -14,7 +14,7 @@ module load nvidia-hpc
 
 make clean && make
 
-SCRATCH_DIRECTORY=/${USER}/ACS/${SLURM_JOBID}
+SCRATCH_DIRECTORY=/${USER}/ACS/
 mkdir -p ${SCRATCH_DIRECTORY}
 cd ${SCRATCH_DIRECTORY}
 
