@@ -10,7 +10,7 @@ all: $(OUT)
 $(OUT): $(SRC) 
 	$(CC) $(FLAGS) $(SRC) -o $(OUT)
 
-load:
+build:
 	$(shell module load $(MOD))
 
 .PHONY: all clean
