@@ -4,7 +4,6 @@ CC = nvc++
 FLAGS = -fopenmp -mp=gpu
 SHELL := /bin/bash
 MOD = nvidia-hpc
-RMS = run_all_magic_matrix.sh
 
 all: build
 
