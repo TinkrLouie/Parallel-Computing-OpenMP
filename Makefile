@@ -21,4 +21,4 @@ clean:
 	rm -rf $(OUT)
 
 csh:
-	rm -rf  $(NM) $(RMS)
+	rm -rf  $(NM) $(RMS) $(LOAD)
