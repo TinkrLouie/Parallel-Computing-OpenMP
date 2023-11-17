@@ -10,7 +10,7 @@ NM = install_numact1.sh
 
 all: build
 
-build:
+build: $(OUT)
 	$(shell module load $(MOD) && $(CC) $(FLAGS) $(SRC) -o $(OUT))
 
 clean:
