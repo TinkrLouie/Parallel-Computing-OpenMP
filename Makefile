@@ -13,7 +13,7 @@ all: $(OUT)
 
 $(OUT): $(SRC)
     module load $(MOD) && \
-    $(CC) $(FLAGS) -c $^ -o $@.o
+    $(CC) $(FLAGS) -c $^ -o $@.o && \
     $(CC) $(FLAGS) $@.o -o $@
 
 .PHONY: clean
