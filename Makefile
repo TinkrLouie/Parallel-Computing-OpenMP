@@ -8,10 +8,10 @@ MOD = nvidia-hpc
 all: $(OUT)
 
 $(OUT): $(SRC)
-	$(CC) $(FLAGS) $(SRC) -o $(OUT)
+	$(shell module load $(MOD) && \
+	$(CC) $(FLAGS) $(SRC) -o $(OUT))
 
-load:
-	$(shell module load $(MOD))
+.PHONY: all clean
 
 clean:
 	rm -rf $(OUT)
