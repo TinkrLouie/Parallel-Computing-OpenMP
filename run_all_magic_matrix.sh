@@ -19,7 +19,7 @@ make clean && make
 # Set the directory where the data sets are located
 data_dir="./data_sets"
 
-datasets=(3 10)
+datasets=(3 10 20)
 
 # Set OMP_NUM_THREADS to the number of available cores
 export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}

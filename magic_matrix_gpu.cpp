@@ -73,13 +73,13 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
             for (int i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
             {   
                 int patternRow = i % N;
-                int modifierRow = i / N;
+                int modifierRow = i % N;
                 int* patternRowPtr = pattern[patternRow];
                 int* modifierRowPtr = modifier[modifierRow];
                 for (int j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
                 {
                     int patternCol = j % N;
-                    int modifierCol = j / N;
+                    int modifierCol = j % N;
                     magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
                 }
             }
