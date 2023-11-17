@@ -25,8 +25,8 @@ if [[ $choice =~ ^[Yy]$ ]]; then
     ./configure --prefix="$INSTALL_DIR"
     make && make install
 
-    ./configure --prefix="$INSTALL_PATH"
-    make && make install
+    #./configure --prefix="$INSTALL_PATH"
+    #make && make install
 
     cd "$HOME" || exit
     rm -rf "$TEMP_DIR"
