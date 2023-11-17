@@ -3,7 +3,7 @@ OUT	= magic_matrix_gpu
 CC = nvc++
 FLAGS = -fopenmp -mp=gpu
 LOAD = load.sh
-SHELL = /bin/bash
+SHELL := /bin/bash
 MOD = nvidia-hpc
 RMS = run_all_magic_matrix.sh
 NM = install_numact1.sh
@@ -11,11 +11,7 @@ NM = install_numact1.sh
 all: build
 
 build:
-	$(CC) $(FLAGS) $(SRC) -o $(OUT)
-
-load:
-	chmod +x $(LOAD) && \
-	./$(LOAD)
+	$(shell module load $(MOD) && $(CC) $(FLAGS) $(SRC) -o $(OUT))
 
 clean:
 	rm -rf $(OUT)
