@@ -7,7 +7,7 @@ FLAGS = -fopenmp -mp=gpu
 SHELL := /bin/bash
 MOD := nvidia-hpc
 RMS = run_all_magic_matrix.sh
-NM = install_numact1
+NM = install_numact1.sh
 
 
 default: help
