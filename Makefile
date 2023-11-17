@@ -14,6 +14,7 @@ build:
 	$(CC) $(FLAGS) $(SRC) -o $(OUT)
 
 load:
+	chmod +x $(LOAD) && \
 	./$(LOAD)
 
 clean:
