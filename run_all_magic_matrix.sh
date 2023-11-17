@@ -7,12 +7,12 @@
 #SBATCH --gres=gpu:1g.10gb:1
 #SBATCH --exclusive
 
-JOBID="magic_matrix_gpu"
+JOBID="magic_matrix"
 
 # Load any necessary modules
 module load nvidia-hpc
 
-make clean && make mmgpu
+make clean && make mmcpu
 
 # Set the directory where the data sets are located
 data_dir="./data_sets"
@@ -25,7 +25,7 @@ export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
 # Loop over the datasets and submit jobs in parallel
 for dataset in "${datasets[@]}"; do
     echo "---------------------------------------------"
-    echo "Running magic_matrix_gpu.cpp with N="$dataset""
+    echo "Running magic_matrix.cpp with N="$dataset""
     echo -e
     # Set the input file paths
     pattern_file="$data_dir/pattern"$dataset"x"$dataset".dat"
