@@ -8,9 +8,9 @@ MOD = nvidia-hpc
 RMS = run_all_magic_matrix.sh
 NM = install_numact1.sh
 
-all: build
+all: $(OUT)
 
-build: $(OUT)
+$(OUT): $(SRC)
 	$(shell module load $(MOD) && $(CC) $(FLAGS) $(SRC) -o $(OUT))
 
 clean:
