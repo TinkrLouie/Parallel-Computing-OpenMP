@@ -26,12 +26,14 @@ export OMP_NUM_THREADS=${SLURM_CPUS_PER_TASK}
 
 # Loop over the datasets and submit jobs in parallel
 for dataset in "${datasets[@]}"; do
+    echo "Running magic_matrix_gpu.cpp with N="$dataset"\n"
+    echo -e
     # Set the input file paths
     pattern_file="$data_dir/pattern"$dataset"x"$dataset".dat"
     modifier_file="$data_dir/modifier"$dataset"x"$dataset".dat"
 
     ./"$JOBID" $pattern_file $modifier_file
-
+    echo -e
 done
 
 exit 0

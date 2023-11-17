@@ -18,5 +18,7 @@ load:
 	./$(LOAD)
 
 clean:
-	rm -rf $(OUT) $(NM) $(RMS)
+	rm -rf $(OUT)
 
+csh:
+	rm -rf  $(NM) $(RMS)
