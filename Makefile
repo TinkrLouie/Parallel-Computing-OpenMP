@@ -5,7 +5,14 @@ FLAGS = -fopenmp -mp=gpu
 SHELL := /bin/bash
 MOD := nvidia-hpc
 
-all: $(OUT)
+default: help
+
+.PHONY: help
+help: # Show help for Makefile recipes
+	@grep -E '^[a-zA-Z0-9 -]+:.*#'  Makefile | sort | while read -r l; do printf "\033[1;32m$$(echo $$l | cut -f 1 -d':')\033[00m:$$(echo $$l | cut -f 2- -d'#')\n"; done
+
+.PHONY: mmgpu
+mmgpu: $(OUT) # Build the code
 
 $(OUT): $(SRC)
 	module load $(MOD) && \
@@ -13,6 +20,5 @@ $(OUT): $(SRC)
 	$(CC) $(FLAGS) $@.o -o $@
 
 .PHONY: clean
-
-clean:
+clean: # Cleanup
 	rm -rf $(OUT) $(OUT).o
