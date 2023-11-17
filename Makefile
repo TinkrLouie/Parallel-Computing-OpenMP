@@ -7,10 +7,6 @@ MOD := nvidia-hpc
 
 all: $(OUT)
 
-#$(OUT): $(SRC)
-#	$(shell module load $(MOD) && \
-#	$(CC) $(FLAGS) $(SRC) -o $(OUT))
-
 $(OUT): $(SRC)
 	module load $(MOD) && \
 	$(CC) $(FLAGS) -c $^ -o $@.o && \
