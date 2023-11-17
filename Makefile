@@ -5,9 +5,9 @@ FLAGS = -fopenmp -mp=gpu
 SHELL := /bin/bash
 MOD = nvidia-hpc
 
-all: build
+all: $(OUT)
 
-build: 
+$(OUT): $(SRC) 
 	$(shell module load $(MOD) && \
 	$(CC) $(FLAGS) $(SRC) -o $(OUT))
 
