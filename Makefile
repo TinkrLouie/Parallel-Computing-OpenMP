@@ -25,7 +25,7 @@ $(OUT): $(SRC)
 	$(CC) $(FLAGS) $@.o -o $@
 
 .PHONY: mmcpu
-mmcpu : $(OUT) # Build the code for CPU execution
+mmcpu : $(OU) # Build the code for CPU execution
 
 $(OU): $(SR)
 	module load $(MOD) && \
