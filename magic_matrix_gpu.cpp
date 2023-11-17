@@ -85,7 +85,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
             }
         }
     }
-    // VERSION 4
+    // VERSION 4 --NOT WORKING
     //int body_start_index;
     //////----------------------------------------------------------------
     ////// OpenMP here!!!-------------------------------------------------

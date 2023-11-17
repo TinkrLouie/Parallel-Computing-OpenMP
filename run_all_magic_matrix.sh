@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH -o ./Reports/magic_matrix_gpu_%j.out
-#SBATCH -e ./Reports/magic_matrix_gpu_%j.err
+#SBATCH -o ./magic_matrix_gpu_%j.out
+#SBATCH -e ./magic_matrix_gpu_%j.err
 #SBATCH -N 1
 #SBATCH -n 1
 #SBATCH -c 2
