@@ -11,7 +11,5 @@ $(OUT): $(SRC)
 	$(shell module load $(MOD) && \
 	$(CC) $(FLAGS) $(SRC) -o $(OUT))
 
-.PHONY: all clean
-
 clean:
 	rm -rf $(OUT)
