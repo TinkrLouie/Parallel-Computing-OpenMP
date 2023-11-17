@@ -32,6 +32,16 @@ $(OU): $(SR)
 	$(CC) $(FLAGS) -c $^ -o $@.o && \
 	$(CC) $(FLAGS) $@.o -o $@
 
+.PHONY: rms
+rms: # Execute SBATCH script
+	chmod +x $(RMS)
+	./$(RMS)
+
+.PHONY: nm
+nm: # Execute install_numact1 script
+	chmod +x $(NM)
+	./$(NM)
+
 .PHONY: clean
 clean: # Cleanup
 	rm -rf $(OUT) $(OUT).o $(OU) $(OU).o
