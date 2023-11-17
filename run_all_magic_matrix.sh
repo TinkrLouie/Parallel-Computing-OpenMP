@@ -14,7 +14,7 @@ JOBID="magic_matrix_gpu"
 # Load any necessary modules
 module load nvidia-hpc
 
-make clean && make
+make clean && make mmgpu
 
 # Set the directory where the data sets are located
 data_dir="./data_sets"
