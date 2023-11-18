@@ -7,7 +7,6 @@ NUMACTL_VERSION="2.0.16"
 TARGET="numact1"
 
 INSTALL_DIR="$HOME/$TARGET"
-INSTALL_PATH="$PATH"
 
 read -p "This script will install numactl version $NUMACTL_VERSION in $INSTALL_DIR. Continue? (y/n): " choice
 
@@ -24,9 +23,6 @@ if [[ $choice =~ ^[Yy]$ ]]; then
 
     ./configure --prefix="$INSTALL_DIR"
     make && make install
-
-    #./configure --prefix="$INSTALL_PATH"
-    #make && make install
 
     export PATH=$PATH:/$HOME/numact1/bin
 
