@@ -32,9 +32,9 @@ if [[ $choice =~ ^[Yy]$ ]]; then
     cd "$HOME" || exit
     rm -rf "$TEMP_DIR"
     echo -e
-    echo "------------------------------------------------------------------------------"
-    echo "Numactl version ${NUMACTL_VERSION} has been installed in $INSTALL_DIR and PATH"
-    echo "------------------------------------------------------------------------------"
+    echo "---------------------------------------------------------------------"
+    echo "Numactl version ${NUMACTL_VERSION} has been installed in $INSTALL_DIR"
+    echo "---------------------------------------------------------------------"
 else
     echo "Installation failed."
 fi
