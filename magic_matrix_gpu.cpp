@@ -207,10 +207,10 @@ bool isMagicSquare(int** matrix, int N)
     #pragma omp parallel for //schedule(guided)
     for (int i = 0; i < N; i++)
     {   
-        if(omp_is_initial_device())
-        {
-          printf("Running on CPU\n");    
-        }
+        //if(omp_is_initial_device())
+        //{
+        //  printf("Running on CPU\n");    
+        //}
         row_sums[i] = sumRow(matrix, i, N);
     }
     if (!allEqual(row_sums, N)) return false;
@@ -324,7 +324,7 @@ int main(int argc, char *argv[])
     //      );
     //    }
     //}
-    #pragma omp target teams num_teams(2)
+    #pragma omp target teams parallel
     {
         if(omp_is_initial_device())
         {
