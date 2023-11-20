@@ -204,6 +204,7 @@ bool isMagicSquare(int** matrix, int N)
     // compute row sums
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
+    #pragma omp target teams parallel
     #pragma omp parallel for //schedule(guided)
     for (int i = 0; i < N; i++)
     {   
@@ -324,21 +325,21 @@ int main(int argc, char *argv[])
     //      );
     //    }
     //}
-    #pragma omp target teams parallel
-    {
-        if(omp_is_initial_device())
-        {
-          printf("Running on CPU\n");    
-        }
-        else{
-          int num_teams= omp_get_num_teams(); 
-          int num_threads_per_team = omp_get_num_threads();
-          printf("Running on GPU with %d teams and %d threads per team\n", 
-            num_teams, 
-            num_threads_per_team
-          );
-        }
-    }
+    //#pragma omp target teams parallel
+    //{
+    //    if(omp_is_initial_device())
+    //    {
+    //      printf("Running on CPU\n");    
+    //    }
+    //    else{
+    //      int num_teams= omp_get_num_teams(); 
+    //      int num_threads_per_team = omp_get_num_threads();
+    //      printf("Running on GPU with %d teams and %d threads per team\n", 
+    //        num_teams, 
+    //        num_threads_per_team
+    //      );
+    //    }
+    //}
 
     //-------------------------------------//
     //BEGINNING-OF-COMPUTATION-------------//
