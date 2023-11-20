@@ -119,7 +119,7 @@ int sumRow( int** matrix, int row, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:sum) //schedule(guided)
+    #pragma omp target teams distribute parallel for reduction(+:sum) //schedule(guided)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
@@ -132,7 +132,7 @@ int sumColumn( int** matrix, int col, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:sum) //schedule(guided)
+    #pragma omp target teams distribute parallel for reduction(+:sum) //schedule(guided)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[i][col];
@@ -171,11 +171,12 @@ bool allEqual( int arr[], int N)
 bool isPairwiseDistinct( int** matrix, int N) {
     bool found = false;
     std::unordered_set<int> elementSet;
+    int i, j;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) shared(found, elementSet) schedule(guided)
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
+    #pragma omp parallel for collapse(2) shared(found, elementSet) private(i, j) schedule(guided)
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
             #pragma omp critical
             {
@@ -219,7 +220,7 @@ bool isMagicSquare(int** matrix, int N)
     // compute sum of elements on main diagonal
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:main_diag_sum) //schedule(guided)
+    #pragma omp target teams distribute parallel for reduction(+:main_diag_sum) //schedule(guided)
     for (int i = 0; i < N; i++)
     {
         main_diag_sum += matrix[i][i];
@@ -228,7 +229,7 @@ bool isMagicSquare(int** matrix, int N)
     // compute sum of elements on antidiagonal
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for reduction(+:anti_diag_sum) //schedule(guided)
+    #pragma omp target teams distribute parallel for reduction(+:anti_diag_sum) //schedule(guided)
     for (int i = 0; i < N; i++)
     {
         anti_diag_sum += matrix[i][N - 1 - i];
@@ -298,6 +299,24 @@ int main(int argc, char *argv[])
     }
     fclose(pattern_file);
     fclose(modifier_file);
+
+    #pragma omp target parallel num_threads(32)
+    {
+        if(omp_is_initial_device())
+        {
+          printf("Running on CPU\n");    
+        }
+        else{
+          int num_teams= omp_get_num_teams(); 
+          int num_threads_per_team = omp_get_num_threads();
+          printf("Running on GPU with %d teams and %d threads per team\n", 
+            num_teams, 
+            num_threads_per_team
+          );
+        }
+    }
+
+
     //-------------------------------------//
     //BEGINNING-OF-COMPUTATION-------------//
     //-------------------------------------//
