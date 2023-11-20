@@ -46,6 +46,14 @@ nm: # Execute install_numact1 script
 	chmod +x $(NM)
 	./$(NM)
 
+.PHONY: run1g
+run1g: # Open SLURM interactive session with 1g.10gb.1
+	srun -n 1 -c 2 --gres=gpu:1g.10gb:1 --partition=ug-gpu-small --pty /bin/bash
+
+.PHONY: runamp
+runamp: # Open SLURM interactive session with full ampere GPU
+	srun -n 1 -c 2 --gres=gpu:ampere --partition=ug-gpu-small --pty /bin/bash
+
 .PHONY: clean
 clean: # Cleanup
 	rm -rf $(OUT) $(OUT).o $(OU) $(OU).o
