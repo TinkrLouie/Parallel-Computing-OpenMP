@@ -206,7 +206,7 @@ bool isMagicSquare(int** matrix, int N)
     // OpenMP here!!!-------------------------------------------------
     #pragma omp target teams parallel
     {
-        #pragma omp parallel for //schedule(guided)
+        #pragma omp for //schedule(guided)
         for (int i = 0; i < N; i++)
         {   
             //if(omp_is_initial_device())
