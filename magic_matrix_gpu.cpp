@@ -275,7 +275,7 @@ int main(int argc, char *argv[])
     int** magicSquare = new int*[M];
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for
+    //#pragma omp parallel for
     for (int i = 0; i < M; i++) {
 	    magicSquare[i] = new int[M];
     }
@@ -332,14 +332,14 @@ int main(int argc, char *argv[])
     // free dynamically allocated memory
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for
+    //#pragma omp parallel for
     for (int i = 0; i < M; i++) {
         delete[] magicSquare[i];
     }
     delete[] magicSquare;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for
+    //#pragma omp parallel for
     for (int i = 0; i < N; i++) {
 	    delete[] pattern[i];
 	    delete[] modifier[i];
