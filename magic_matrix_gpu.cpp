@@ -140,33 +140,33 @@ int sumColumn( int** matrix, int col, int N)
     return sum;
 }
 // checks if all elements in an array are equal
-bool allEqual( int arr[], int N)
-{   
-    for (int i = 0; i < N; i++){
-        if (arr[0] != arr[i])
-	{
-            return false;
-        }
-    }
-    return true;
-}
-
-//bool allEqual(int arr[], int N) {
-//    bool result = true;
-//
-//    #pragma omp parallel for shared(result)
-//    for (int i = 1; i < N; i++) {
-//        // Use a critical section to update the result variable
-//        #pragma omp critical
-//        {
-//            if (arr[0] != arr[i]) {
-//                result = false;
-//            }
+//bool allEqual( int arr[], int N)
+//{   
+//    for (int i = 0; i < N; i++){
+//        if (arr[0] != arr[i])
+//	{
+//            return false;
 //        }
 //    }
-//
-//    return result;
+//    return true;
 //}
+
+bool allEqual(int arr[], int N) {
+    bool result = true;
+
+    #pragma omp parallel for shared(result)
+    for (int i = 1; i < N; i++) {
+        // Use a critical section to update the result variable
+        #pragma omp critical
+        {
+            if (arr[0] != arr[i]) {
+                result = false;
+            }
+        }
+    }
+
+    return result;
+}
 
 bool isPairwiseDistinct( int** matrix, int N) {
     bool found = false;
