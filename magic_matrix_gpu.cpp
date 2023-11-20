@@ -204,7 +204,7 @@ bool isMagicSquare(int** matrix, int N)
     // compute row sums
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for //schedule(guided)
+    #pragma omp parallel for num_threads(20)//schedule(guided)
     for (int i = 0; i < N; i++)
     {   
         if(omp_is_initial_device())
@@ -228,7 +228,7 @@ bool isMagicSquare(int** matrix, int N)
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
     //#pragma omp target parallel num_threads(32)
-    #pragma omp target teams distribute parallel for reduction(+:main_diag_sum) //schedule(guided)
+    #pragma omp target teams distribute parallel for reduction(+:main_diag_sum) num_teams //schedule(guided)
     for (int i = 0; i < N; i++)
     {
         main_diag_sum += matrix[i][i];
