@@ -24,6 +24,10 @@ $(OUT): $(SRC)
 	$(CC) $(FLAGS) -c $^ -o $@.o && \
 	$(CC) $(FLAGS) $@.o -o $@
 
+.PHONY: xgpu
+xgpu: # Run mmgpu on N=20
+	./$(OUT) ./data_sets/pattern20x20.dat ./data_sets/modifier20x20.dat
+
 .PHONY: mmcpu
 mmcpu : $(OU) # Build the code for CPU execution
 
