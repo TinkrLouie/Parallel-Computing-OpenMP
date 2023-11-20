@@ -35,17 +35,18 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     // VERSION 1
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    //#pragma omp parallel for collapse(2)
-    //for (int i = 0; i < M; i++)
-    //{
-    //    for (int j = 0; j < M; j++)
-    //    {
-    //        int patternRow = i % N;
-    //        int patternCol = j % N;
-    //        magicSquare[i][j] = pattern[patternRow][patternCol];
-	//        magicSquare[i][j] += modifier[i/N][j/N];
-    //    }
-    //}
+    #pragma omp parallel for collapse(2)
+    for (int i = 0; i < M; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            int patternRow = i % N;
+            int patternCol = j % N;
+            magicSquare[i][j] = pattern[patternRow][patternCol];
+	        magicSquare[i][j] += modifier[i/N][j/N];
+        }
+    }
+
     // VERSION 2
     //#pragma omp parallel for shared(pattern, modifier, magicSquare)
     //for (int i = 0; i < M; i++)
@@ -62,29 +63,29 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //    }
     //}
     // VERSION 3
-    int iOuter, jOuter;
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) private(iOuter, jOuter) schedule(guided)
-    for (iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
-    {
-        for (jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
-        {   
-            for (int i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
-            {   
-                int patternRow = i % N;
-                int modifierRow = i / N;
-                int* patternRowPtr = pattern[patternRow];
-                int* modifierRowPtr = modifier[modifierRow];
-                for (int j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
-                {
-                    int patternCol = j % N;
-                    int modifierCol = j / N;
-                    magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
-                }
-            }
-        }
-    }
+    //int iOuter, jOuter;
+    ////----------------------------------------------------------------
+    //// OpenMP here!!!-------------------------------------------------
+    //#pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) private(iOuter, jOuter) schedule(guided)
+    //for (iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
+    //{
+    //    for (jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
+    //    {   
+    //        for (int i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
+    //        {   
+    //            int patternRow = i % N;
+    //            int modifierRow = i / N;
+    //            int* patternRowPtr = pattern[patternRow];
+    //            int* modifierRowPtr = modifier[modifierRow];
+    //            for (int j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
+    //            {
+    //                int patternCol = j % N;
+    //                int modifierCol = j / N;
+    //                magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
+    //            }
+    //        }
+    //    }
+    //}
     // VERSION 4 --NOT WORKING
     //int body_start_index;
     //////----------------------------------------------------------------
@@ -195,12 +196,11 @@ bool isMagicSquare(int** matrix, int N)
     int col_sums[N];
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
-    int rowFlag = 0;
-    int colFlag = 0;
+
     // compute row sums
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for schedule(guided) shared(rowFlag)
+    #pragma omp parallel for schedule(guided)
     for (int i = 0; i < N; i++)
     {
         row_sums[i] = sumRow(matrix, i, N);
@@ -210,7 +210,7 @@ bool isMagicSquare(int** matrix, int N)
     // compute column sums
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for schedule(guided) shared(colFlag)
+    #pragma omp parallel for schedule(guided)
     for (int i = 0; i < N; i++)
     {
         col_sums[i] = sumColumn(matrix, i, N);
