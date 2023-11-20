@@ -205,14 +205,16 @@ bool isMagicSquare(int** matrix, int N)
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
     #pragma omp target teams parallel
-    #pragma omp parallel for //schedule(guided)
-    for (int i = 0; i < N; i++)
-    {   
-        //if(omp_is_initial_device())
-        //{
-        //  printf("Running on CPU\n");    
-        //}
-        row_sums[i] = sumRow(matrix, i, N);
+    {
+        #pragma omp parallel for //schedule(guided)
+        for (int i = 0; i < N; i++)
+        {   
+            //if(omp_is_initial_device())
+            //{
+            //  printf("Running on CPU\n");    
+            //}
+            row_sums[i] = sumRow(matrix, i, N);
+        }
     }
     if (!allEqual(row_sums, N)) return false;
     int row_sum = row_sums[0];
