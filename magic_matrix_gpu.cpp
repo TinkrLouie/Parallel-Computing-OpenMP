@@ -119,6 +119,7 @@ int sumRow( int** matrix, int row, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
+    #pragma omp target parallel num_teams(2) num_threads(32)
     #pragma omp target teams distribute parallel for reduction(+:sum) //schedule(guided)
     for (int i = 0; i < N; i++)
     {
@@ -132,6 +133,7 @@ int sumColumn( int** matrix, int col, int N)
     int sum = 0;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
+    #pragma omp target parallel num_teams(2) num_threads(32)
     #pragma omp target teams distribute parallel for reduction(+:sum) //schedule(guided)
     for (int i = 0; i < N; i++)
     {
@@ -174,6 +176,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     int i, j;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
+    #pragma omp target parallel num_teams(2) num_threads(32)
     #pragma omp parallel for collapse(2) shared(found, elementSet) private(i, j) schedule(guided)
     for (i = 0; i < N; i++) {
         for (j = 0; j < N; j++) {
@@ -220,6 +223,7 @@ bool isMagicSquare(int** matrix, int N)
     // compute sum of elements on main diagonal
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
+    #pragma omp target parallel num_teams(2) num_threads(32)
     #pragma omp target teams distribute parallel for reduction(+:main_diag_sum) //schedule(guided)
     for (int i = 0; i < N; i++)
     {
@@ -229,6 +233,7 @@ bool isMagicSquare(int** matrix, int N)
     // compute sum of elements on antidiagonal
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
+    #pragma omp target parallel num_teams(2) num_threads(32)
     #pragma omp target teams distribute parallel for reduction(+:anti_diag_sum) //schedule(guided)
     for (int i = 0; i < N; i++)
     {
@@ -300,21 +305,21 @@ int main(int argc, char *argv[])
     fclose(pattern_file);
     fclose(modifier_file);
 
-    #pragma omp target parallel num_threads(32)
-    {
-        if(omp_is_initial_device())
-        {
-          printf("Running on CPU\n");    
-        }
-        else{
-          int num_teams= omp_get_num_teams(); 
-          int num_threads_per_team = omp_get_num_threads();
-          printf("Running on GPU with %d teams and %d threads per team\n", 
-            num_teams, 
-            num_threads_per_team
-          );
-        }
-    }
+    //#pragma omp target parallel num_threads(32)
+    //{
+    //    if(omp_is_initial_device())
+    //    {
+    //      printf("Running on CPU\n");    
+    //    }
+    //    else{
+    //      int num_teams= omp_get_num_teams(); 
+    //      int num_threads_per_team = omp_get_num_threads();
+    //      printf("Running on GPU with %d teams and %d threads per team\n", 
+    //        num_teams, 
+    //        num_threads_per_team
+    //      );
+    //    }
+    //}
 
 
     //-------------------------------------//
