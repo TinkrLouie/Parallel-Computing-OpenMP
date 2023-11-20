@@ -66,7 +66,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     int iOuter, jOuter;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) private(iOuter, jOuter) //schedule(guided)
+    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) private(iOuter, jOuter) schedule(guided)
     for (iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
     {
         for (jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
@@ -173,7 +173,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     std::unordered_set<int> elementSet;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) shared(found, elementSet) //schedule(guided)
+    #pragma omp parallel for collapse(2) shared(found, elementSet) schedule(guided)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
