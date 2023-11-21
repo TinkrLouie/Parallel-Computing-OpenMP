@@ -200,13 +200,14 @@ bool isMagicSquare(int** matrix, int N)
     int col_sums[N];
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
+    int i;
 
     // compute row sums
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp target teams parallel
+    #pragma omp target teams parallel private(i)
     {
-        for (int i = 0; i < N; i++)
+        for (i = 0; i < N; i++)
         {   
             if(!omp_is_initial_device() && i == 0)
             {
@@ -217,7 +218,7 @@ bool isMagicSquare(int** matrix, int N)
     }
     if (!allEqual(row_sums, N)) return false;
     int row_sum = row_sums[0];
-    
+
     // compute column sums
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
