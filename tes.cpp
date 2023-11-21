@@ -232,9 +232,10 @@ int main(int argc, char *argv[])
             num_teams, 
             num_threads_per_team
           );
+        }
         generateMagicSquare(pattern, modifier, magicSquare, N, M);
         bool is_magic_square = isMagicSquare(magicSquare, M);
-        }
+        
     }
 
     //-------------------------------------//
