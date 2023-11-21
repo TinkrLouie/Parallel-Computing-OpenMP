@@ -22,54 +22,35 @@
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
-    #pragma omp declare target
-    int** gpuMatrix = new int*[M];
-    int** gpuModifier = new int*[N];
-    int** gpuPattern = new int*[N];
+    //#pragma omp declare target
+    //int** gpuMatrix = new int*[M];
+    //int** gpuModifier = new int*[N];
+    //int** gpuPattern = new int*[N];
+//
+    //for (int i = 0; i < N; i++) {
+    //    gpuPattern[i] = new int[N];
+    //    gpuModifier[i] = new int[N];
+    //}
+    //
+    //for (int i = 0; i < M; i++) {
+    //    gpuMatrix[i] = new int[M];
+    //}
+    //#pragma omp end declare target
 
-    for (int i = 0; i < N; i++) {
-        gpuPattern[i] = new int[N];
-        gpuModifier[i] = new int[N];
-    }
-    
-    for (int i = 0; i < M; i++) {
-        gpuMatrix[i] = new int[M];
-    }
-    #pragma omp end declare target
-
-    #pragma omp target map(from:gpuMatrix, gpuModifier, gpuPattern) map(to:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N]) 
+    #pragma omp targetmap(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N]) 
     {   
         if(omp_is_initial_device())
         {
             printf("CPU");    
         }
         #pragma omp parallel for collapse(2)
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                gpuPattern[i][j] = pattern[i][j];
-                gpuModifier[i][j] = modifier[i][j];
-            }
-        }
-
-        #pragma omp parallel for collapse(2)
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < M; j++) {
-                gpuMatrix[i][j] = magicSquare[i][j];
-            }
-        }
-
-        #pragma omp barrier
-
-        #pragma omp parallel for collapse(2)
         for (int i = 0; i < N; i++)
         {
             for (int j = 0; j < N; j++)
             {
-	    	    gpuModifier[i][j] *= M;
+	    	    modifier[i][j] *= M;
 	        }
         }
-
-        #pragma omp barrier
 
         #pragma omp parallel for collapse(2)
         for (int i = 0; i < M; i++)
@@ -78,13 +59,11 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
             {
                 int patternRow = i % N;
                 int patternCol = j % N;
-                gpuMatrix[i][j] = gpuPattern[patternRow][patternCol];
-	            gpuMatrix[i][j] += gpuModifier[i/N][j/N];
+                magicSquare[i][j] = pattern[patternRow][patternCol];
+	            magicSquare[i][j] += modifier[i/N][j/N];
             }
         }
     }
-
-    #pragma omp target exit data map(delete:gpuMatrix[:M][:M], gpuModifier[:N][:N], gpuPattern[:N][:N])
 }
 
 // computes sum of elements in a row
