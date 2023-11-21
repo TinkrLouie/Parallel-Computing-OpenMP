@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
     }
 
     // Timer Init
-    double itime, ftime, gMSe;
+    double itime, ftime;
 
     FILE *pattern_file = fopen(argv[1], "r");
     FILE *modifier_file = fopen(argv[2], "r");
