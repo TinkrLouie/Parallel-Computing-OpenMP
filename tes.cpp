@@ -124,7 +124,7 @@ bool isMagicSquare(int** matrix, int N)
           printf("Running on CPU\n");    
         }
         // compute row sums
-        #pragma omp parallel for private(i)
+        //#pragma omp parallel for private(i,j)
         for (i = 0; i < N; i++)
         {
             //row_sums[i] = sumRow(matrix, i, N);
