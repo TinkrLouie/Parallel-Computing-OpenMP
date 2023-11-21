@@ -128,7 +128,7 @@ bool isMagicSquare(int** matrix, int N)
         for (i = 0; i < N; i++)
         {
             //row_sums[i] = sumRow(matrix, i, N);
-            #pragma omp for reduction(+:row_sum[i])
+            #pragma omp for reduction(+:row_sums[i])
             for (j = 0; j < N; j++)
             {
                 row_sums[i] += matrix[j][i];
