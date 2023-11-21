@@ -22,7 +22,7 @@
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
-     #pragma omp target teams distribute map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
+     #pragma omp target teams map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
     {   
         if(omp_is_initial_device())
         {
