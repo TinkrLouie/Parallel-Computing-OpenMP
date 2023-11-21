@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <omp.h>
-#include <cstdlib>
 #include <unordered_set>
 #define CHUNK_SIZE 32
 // The generateMagicSquare() function is supposed to generate a large matrix square from two smaller ones.
@@ -115,7 +114,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 int sumRow( int** matrix, int row, int N)
 {
     int sum = 0;
-    #pragma omp target parallel for reduction(+:sum) map(to:matrix[:N][:N])
+    //#pragma omp target parallel for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
@@ -205,10 +204,6 @@ bool isPairwiseDistinct( int** matrix, int N) {
     //printf("isPairwiseDistinct: %.15f\n", e - s);
     //return found;
 }
-
-#pragma omp declare target
-int sumRow( int** matrix, int row, int N);
-#pragma omp end declare target
 
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N)
