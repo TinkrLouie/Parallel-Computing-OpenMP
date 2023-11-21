@@ -23,6 +23,7 @@
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
+    if (N > 50) {
     #pragma omp target map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
     {   
         if(omp_is_initial_device())
@@ -72,6 +73,29 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
                         magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
                     }
                 }
+            }
+        }
+    }
+    }
+    else {
+        #pragma omp parallel for collapse(2)
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < N; j++)
+            {
+	    	    modifier[i][j] *= M;
+	        }
+        }
+        
+        #pragma omp parallel for collapse(2)
+        for (int i = 0; i < M; i++)
+        {
+            for (int j = 0; j < M; j++)
+            {
+                int patternRow = i % N;
+                int patternCol = j % N;
+                magicSquare[i][j] = pattern[patternRow][patternCol];
+                magicSquare[i][j] += modifier[i/N][j/N];
             }
         }
     }
