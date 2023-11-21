@@ -58,6 +58,8 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
             }
         }
 
+        #pragma omp barrier
+
         #pragma omp parallel for collapse(2)
         for (int i = 0; i < N; i++)
         {
