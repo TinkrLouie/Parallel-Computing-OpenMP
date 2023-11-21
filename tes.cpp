@@ -24,58 +24,58 @@
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
     if (N > 50) {
-    #pragma omp target map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
-    {   
-        if(omp_is_initial_device())
-        {
-          printf("Running on CPU\n");    
-        }
-        #pragma omp parallel for collapse(2)
-        for (int i = 0; i < N; i++)
-        {
-            for (int j = 0; j < N; j++)
+        #pragma omp target map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
+        {   
+            if(omp_is_initial_device())
             {
-	    	    modifier[i][j] *= M;
-	        }
-        }
-
-        #pragma omp barrier
-
-        //ORIGINAL APPROACH
-        //#pragma omp parallel for collapse(2)
-        //for (int i = 0; i < M; i++)
-        //{
-        //    for (int j = 0; j < M; j++)
-        //    {
-        //        int patternRow = i % N;
-        //        int patternCol = j % N;
-        //        magicSquare[i][j] = pattern[patternRow][patternCol];
-	    //        magicSquare[i][j] += modifier[i/N][j/N];
-        //    }
-        //}
-
-        //MATRIX TILING
-        #pragma omp parallel for collapse(2)
-        for (int iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
-        {
-            for (int jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
-            {   
-                for (int i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
+              printf("Running on CPU\n");    
+            }
+            #pragma omp parallel for collapse(2)
+            for (int i = 0; i < N; i++)
+            {
+                for (int j = 0; j < N; j++)
+                {
+	        	    modifier[i][j] *= M;
+	            }
+            }
+    
+            #pragma omp barrier
+    
+            //ORIGINAL APPROACH
+            //#pragma omp parallel for collapse(2)
+            //for (int i = 0; i < M; i++)
+            //{
+            //    for (int j = 0; j < M; j++)
+            //    {
+            //        int patternRow = i % N;
+            //        int patternCol = j % N;
+            //        magicSquare[i][j] = pattern[patternRow][patternCol];
+	        //        magicSquare[i][j] += modifier[i/N][j/N];
+            //    }
+            //}
+    
+            //MATRIX TILING
+            #pragma omp parallel for collapse(2)
+            for (int iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
+            {
+                for (int jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
                 {   
-                    int patternRow = i % N;
-                    int modifierRow = i / N;
-                    int* patternRowPtr = pattern[patternRow];
-                    int* modifierRowPtr = modifier[modifierRow];
-                    for (int j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
-                    {
-                        int patternCol = j % N;
-                        int modifierCol = j / N;
-                        magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
+                    for (int i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
+                    {   
+                        int patternRow = i % N;
+                        int modifierRow = i / N;
+                        int* patternRowPtr = pattern[patternRow];
+                        int* modifierRowPtr = modifier[modifierRow];
+                        for (int j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
+                        {
+                            int patternCol = j % N;
+                            int modifierCol = j / N;
+                            magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
+                        }
                     }
                 }
             }
         }
-    }
     }
     else {
         #pragma omp parallel for collapse(2)
