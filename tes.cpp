@@ -114,6 +114,8 @@ bool allEqual( int arr[], int N)
 }
 
 bool isPairwiseDistinct( int** matrix, int N) {
+    int s,e;
+    s = omp_get_wtime();
     bool result = false;
     #pragma omp target teams distribute parallel map(to:matrix[:N][:N])
     {
@@ -138,6 +140,8 @@ bool isPairwiseDistinct( int** matrix, int N) {
             }
         }
     }
+    e = omp_get_wtime();
+    printf("isPairwiseDistinct: %.15f", e - s);
     return result;
 
     //bool found = false;
