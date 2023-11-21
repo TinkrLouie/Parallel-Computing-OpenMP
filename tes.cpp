@@ -38,9 +38,9 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 	        	    modifier[i][j] *= M;
 	            }
             }
-    
+
             #pragma omp barrier
-    
+
             //ORIGINAL APPROACH
             //#pragma omp parallel for collapse(2)
             //for (int i = 0; i < M; i++)
@@ -53,9 +53,9 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 	        //        magicSquare[i][j] += modifier[i/N][j/N];
             //    }
             //}
-    
+
             //MATRIX TILING
-            #pragma omp parallel for collapse(2)
+            #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier)
             for (int iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
             {
                 for (int jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
@@ -87,7 +87,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 	        }
         }
 
-        #pragma omp parallel for collapse(2)
+        #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier)
         for (int iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
         {
             for (int jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
