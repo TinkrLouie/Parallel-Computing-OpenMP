@@ -22,29 +22,35 @@
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
-    //#pragma omp for collapse(2)
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < N; j++)
+     #pragma omp target teams distribute parallel map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
+    {   
+        if(omp_is_initial_device())
         {
-		    modifier[i][j] *= M;
-	    }
-    }
+          printf("Running on CPU\n");    
+        }
+        #pragma omp for collapse(2)
+        for (int i = 0; i < N; i++)
+        {
+            for (int j = 0; j < N; j++)
+            {
+	    	    modifier[i][j] *= M;
+	        }
+        }
 
-    //#pragma omp barrier
-    
-    //#pragma omp for collapse(2)
-    for (int i = 0; i < M; i++)
-    {
-        for (int j = 0; j < M; j++)
+        #pragma omp barrier
+
+        #pragma omp for collapse(2)
+        for (int i = 0; i < M; i++)
         {
-            int patternRow = i % N;
-            int patternCol = j % N;
-            magicSquare[i][j] = pattern[patternRow][patternCol];
-	        magicSquare[i][j] += modifier[i/N][j/N];
+            for (int j = 0; j < M; j++)
+            {
+                int patternRow = i % N;
+                int patternCol = j % N;
+                magicSquare[i][j] = pattern[patternRow][patternCol];
+	            magicSquare[i][j] += modifier[i/N][j/N];
+            }
         }
     }
-    
 }
 
 // computes sum of elements in a row
@@ -136,6 +142,7 @@ bool isMagicSquare(int** matrix, int N)
     int row_sum = row_sums[0];
     if (main_diag_sum != row_sum) return false;
 
+    #pragma omp target teams distribute parallel for reduction(+:anti_diag_sum) map(to:matrix[:N])
     // compute sum of elements on antidiagonal
     for (int i = 0; i < N; i++)
     {
@@ -223,16 +230,10 @@ int main(int argc, char *argv[])
 
     // Timer Init
     itime = omp_get_wtime();
-    bool is_magic_square;
-    #pragma omp target teams distribute parallel map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
-    {   
-        if(omp_is_initial_device())
-        {
-          printf("Running on CPU\n");    
-        }
-        generateMagicSquare(pattern, modifier, magicSquare, N, M);
-    }
-    is_magic_square = isMagicSquare(magicSquare, M);
+
+    generateMagicSquare(pattern, modifier, magicSquare, N, M);
+
+    bool is_magic_square = isMagicSquare(magicSquare, M);
     //-------------------------------------//
     //BOOL FOR DETERMINING MAGIC SQUARE----//
     //-------------------------------------//
