@@ -111,7 +111,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N)
 {   
-    int i,j;
+    int i;
     int row_sums[N];
     int col_sums[N];
     int main_diag_sum = 0;
@@ -124,16 +124,10 @@ bool isMagicSquare(int** matrix, int N)
           printf("Running on CPU\n");    
         }
         // compute row sums
-        //#pragma omp parallel for private(i,j)
+        #pragma omp parallel for private(i)
         for (i = 0; i < N; i++)
         {
-            //row_sums[i] = sumRow(matrix, i, N);
-            #pragma omp for reduction(+:row_sums[i])
-            for (j = 0; j < N; j++)
-            {
-                row_sums[i] += matrix[j][i];
-            }
-
+            row_sums[i] = sumRow(matrix, i, N);
             col_sums[i] = sumColumn(matrix, i, N);
         }
     }
