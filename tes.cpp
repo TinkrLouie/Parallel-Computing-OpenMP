@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <omp.h>
+#include <cstdlib>
 
 // The generateMagicSquare() function is supposed to generate a large matrix square from two smaller ones.
 //
