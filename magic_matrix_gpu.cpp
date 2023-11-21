@@ -185,7 +185,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     // OpenMP here!!!-------------------------------------------------
     #pragma omp target teams distribute parallel map(to:matrix[:N][:N], elementSet)
     {   
-        #pragma omp parallel for collapse(2) shared(found, elementSet) private(i, j)
+        #pragma omp parallel for collapse(2) shared(found, elementSet) private(i, j) reduction(||:found)
         for (i = 0; i < N; i++) {
             for (j = 0; j < N; j++) {
                 int currentElement = matrix[i][j];
@@ -199,6 +199,8 @@ bool isPairwiseDistinct( int** matrix, int N) {
             }
         }
     }
+    e = omp_get_wtime();
+    printf("isPairwiseDistinct: %.15f\n", e - s);
     return found;
 }
 
