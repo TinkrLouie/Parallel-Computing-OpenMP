@@ -21,25 +21,43 @@
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
-    #pragma omp target
-    {
+    int** gpuMatrix;
+    int** gpuModifier;
+    int** gpuPattern;
+    #pragma omp target map(from:gpuMatrix, gpuModifier, gpuPattern) map(to:magicSquare[:M][:M], modfier[:N][:N], pattern[:N][:N]) 
+    {   
+        gpuModifier = new int*[N];
+        gpuPattern = new int*[N];
+        for (int i = 0; i < N; i++) {
+            gpuPattern[i] = new int[N];
+            gpuModifier[i] = new int[N];
+        }
+        gpuMatrix = new int*[M];
+        for (int i = 0; i < M; i++) {
+            gpuMatrix[i] = new int[M];
+        }
+
         #pragma omp parallel for collapse(2)
         for (int i = 0; i < N; i++)
         {
             for (int j = 0; j < N; j++)
             {
-	    	    modifier[i][j] *= M;
+	    	    gpuModifier[i][j] *= M;
 	        }
         }
-    }
-    for (int i = 0; i < M; i++)
-    {
-        for (int j = 0; j < M; j++)
+
+        #pragma omp barrier
+
+        #pragma omp parallel for collapse(2)
+        for (int i = 0; i < M; i++)
         {
-            int patternRow = i % N;
-            int patternCol = j % N;
-            magicSquare[i][j] = pattern[patternRow][patternCol];
-	        magicSquare[i][j] += modifier[i/N][j/N];
+            for (int j = 0; j < M; j++)
+            {
+                int patternRow = i % N;
+                int patternCol = j % N;
+                gpuMatrix[i][j] = gpuPattern[patternRow][patternCol];
+	            gpuMatrix[i][j] += gpuModifier[i/N][j/N];
+            }
         }
     }
 }
