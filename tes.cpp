@@ -125,7 +125,8 @@ bool isPairwiseDistinct( int** matrix, int N) {
                         if (row != i || col != j) {
                             int otherElement = matrix[row][col];
                             if (currentElement == otherElement) {
-                                {
+                                {   
+                                    #pragma omp atomic
                                     result = true;
                                 }
                             }
@@ -140,7 +141,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     //bool found = false;
     //std::unordered_set<int> elementSet;
     //int i, j;
-//
+
     ////----------------------------------------------------------------
     //// OpenMP here!!!-------------------------------------------------
     //#pragma omp target teams distribute parallel for collapse(2) shared(found, elementSet) private(i, j) map(to:matrix[:N][:N], elementSet)
