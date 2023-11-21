@@ -25,9 +25,9 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     int i,j, iOuter, jOuter;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp target teams
+    #pragma omp target
     {   
-        
+
         #pragma omp parallel for collapse(2) private(j)//schedule(guided)
         for (i = 0; i < N; i++)
         {
