@@ -218,7 +218,7 @@ int main(int argc, char *argv[])
     // Timer Init
     itime = omp_get_wtime();
     bool is_magic_square;
-    #pragma omp target map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
+    #pragma omp target teams distribute parallel map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
     {   
         if(omp_is_initial_device())
         {
