@@ -129,7 +129,7 @@ bool isMagicSquare(int** matrix, int N)
         {
             //row_sums[i] = sumRow(matrix, i, N);
             int sum = 0;
-            #pragma omp target teams distribute parallel for reduction(+:sum)
+            #pragma omp for reduction(+:sum)
             for (j = 0; j < N; j++)
             {
                 sum += matrix[j][i];
@@ -186,7 +186,7 @@ int main(int argc, char *argv[])
 
     // Timer Init
     double itime, ftime;
-    omp_set_nested(1);
+    //omp_set_nested(1);
 
     FILE *pattern_file = fopen(argv[1], "r");
     FILE *modifier_file = fopen(argv[2], "r");
