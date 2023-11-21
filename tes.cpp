@@ -166,12 +166,13 @@ bool isPairwiseDistinct( int** matrix, int N) {
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N)
 {   
+    #pragma omp declare target
     int i;
     int row_sums[N];
     int col_sums[N];
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
-
+    #pragma omp end declare target
     #pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:row_sums[:N],col_sums[:N])
     {   
         if(omp_is_initial_device())
