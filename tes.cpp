@@ -219,6 +219,7 @@ int main(int argc, char *argv[])
 
     // Timer Init
     itime = omp_get_wtime();
+    bool is_magic_square;
     #pragma omp target map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
     {   
         if(omp_is_initial_device())
@@ -234,8 +235,7 @@ int main(int argc, char *argv[])
           );
         }
         generateMagicSquare(pattern, modifier, magicSquare, N, M);
-        bool is_magic_square = isMagicSquare(magicSquare, M);
-        
+        is_magic_square = isMagicSquare(magicSquare, M);
     }
 
     //-------------------------------------//
