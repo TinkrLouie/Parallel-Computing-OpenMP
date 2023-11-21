@@ -220,7 +220,18 @@ int main(int argc, char *argv[])
     // Timer Init
     itime = omp_get_wtime();
     #pragma omp target map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
-    {
+    {   
+        if(omp_is_initial_device())
+        {
+          printf("Running on CPU\n");    
+        }
+        else{
+          int num_teams= omp_get_num_teams(); 
+          int num_threads_per_team = omp_get_num_threads();
+          printf("Running on GPU with %d teams and %d threads per team\n", 
+            num_teams, 
+            num_threads_per_team
+          );
         generateMagicSquare(pattern, modifier, magicSquare, N, M);
         bool is_magic_square = isMagicSquare(magicSquare, M);
     }
