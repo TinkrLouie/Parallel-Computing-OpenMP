@@ -30,7 +30,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
             {
               printf("Running on CPU\n");    
             }
-            #pragma omp parallel for collapse(2) schedule(dynamic)
+            #pragma omp parallel for collapse(2) schedule(static)
             for (int i = 0; i < N; i++)
             {
                 for (int j = 0; j < N; j++)
@@ -55,7 +55,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
             //}
 
             //MATRIX TILING
-            #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) schedule(dynamic)
+            #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) schedule(static)
             for (int iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
             {
                 for (int jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
@@ -152,12 +152,12 @@ bool isPairwiseDistinct( int** matrix, int N) {
     bool result = false;
     #pragma omp target teams distribute parallel map(to:matrix[:N][:N])
     {
-        #pragma omp parallel for collapse(2) shared(result) schedule(dynamic)
+        #pragma omp parallel for collapse(2) shared(result) schedule(static)
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
                 int currentElement = matrix[i][j];
 
-                #pragma omp parallel for collapse(2) reduction(||:result) schedule(dynamic)
+                #pragma omp parallel for collapse(2) reduction(||:result) schedule(static)
                 for (int row = 0; row < N; row++) {
                     for (int col = 0; col < N; col++) {
                         if (row != i || col != j) {
@@ -219,7 +219,7 @@ bool isMagicSquare(int** matrix, int N)
         
         
         // compute row sums
-        #pragma omp parallel for private(i) schedule(dynamic)
+        #pragma omp parallel for private(i) schedule(static)
         for (i = 0; i < N; i++)
         {
             row_sums[i] = sumRow(matrix, i, N);
@@ -234,7 +234,7 @@ bool isMagicSquare(int** matrix, int N)
           printf("Running on CPU\n");    
         }
         // compute row sums
-        #pragma omp parallel for private(i) schedule(dynamic)
+        #pragma omp parallel for private(i) schedule(static)
         for (i = 0; i < N; i++)
         {
             col_sums[i] = sumColumn(matrix, i, N);
@@ -254,7 +254,7 @@ bool isMagicSquare(int** matrix, int N)
     //}
     //if (!allEqual(col_sums, N)) return false;
 
-    #pragma omp target teams distribute parallel for reduction(+:main_diag_sum) map(to:matrix[:N][:N]) schedule(dynamic)
+    #pragma omp target teams distribute parallel for reduction(+:main_diag_sum) map(to:matrix[:N][:N]) schedule(static)
     // compute sum of elements on main diagonal
     for (int i = 0; i < N; i++)
     {
@@ -263,7 +263,7 @@ bool isMagicSquare(int** matrix, int N)
     int row_sum = row_sums[0];
     if (main_diag_sum != row_sum) return false;
     n4 = omp_get_wtime();
-    #pragma omp target teams distribute parallel for reduction(+:anti_diag_sum) map(to:matrix[:N][:N]) schedule(dynamic)
+    #pragma omp target teams distribute parallel for reduction(+:anti_diag_sum) map(to:matrix[:N][:N]) schedule(static)
     // compute sum of elements on antidiagonal
     for (int i = 0; i < N; i++)
     {
