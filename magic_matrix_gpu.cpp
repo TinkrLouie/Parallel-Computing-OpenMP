@@ -176,14 +176,14 @@ bool isPairwiseDistinct( int** matrix, int N) {
     //e = omp_get_wtime();
     //printf("isPairwiseDistinct: %.15f\n", e - s);
     //return result;
-
+    #pragma omp declare target
     bool found = false;
     std::unordered_set<int> elementSet;
     int i, j;
-
+    #pragma omp end declare target
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp target teams distribute parallel map(to:matrix[:N][:N], elementSet)
+    #pragma omp target teams distribute parallel map(to:matrix[:N][:N])
     {   
         #pragma omp parallel for collapse(2) shared(found, elementSet) private(i, j) reduction(||:found)
         for (i = 0; i < N; i++) {
