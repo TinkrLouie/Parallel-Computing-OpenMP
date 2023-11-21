@@ -108,20 +108,24 @@ bool isMagicSquare(int** matrix, int N)
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
 
-    // compute row sums
-    for (int i = 0; i < N; i++)
+    #pragma omp target teams distribute parallel map(to:matrix[:N][:N])
     {
-        row_sums[i] = sumRow(matrix, i, N);
+        // compute row sums
+        #pragma omp for
+        for (int i = 0; i < N; i++)
+        {
+            row_sums[i] = sumRow(matrix, i, N);
+        }
+        
+        // compute column sums
+        #pragma omp for
+        for (int i = 0; i < N; i++)
+        {
+            col_sums[i] = sumColumn(matrix, i, N);
+        }
     }
     if (!allEqual(row_sums, N)) return false;
-
-    // compute column sums
-    for (int i = 0; i < N; i++)
-    {
-        col_sums[i] = sumColumn(matrix, i, N);
-    }
     if (!allEqual(col_sums, N)) return false;
-
     // compute sum of elements on main diagonal
     for (int i = 0; i < N; i++)
     {
