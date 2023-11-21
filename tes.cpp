@@ -22,11 +22,7 @@
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
-    if(omp_is_initial_device())
-    {
-        printf("CPU");    
-    }
-    #pragma omp parallel for collapse(2)
+    //#pragma omp parallel for collapse(2)
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -35,7 +31,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 	    }
     }
 
-    #pragma omp parallel for collapse(2)
+    //#pragma omp parallel for collapse(2)
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < M; j++)
@@ -235,7 +231,6 @@ int main(int argc, char *argv[])
           );
         }
         generateMagicSquare(pattern, modifier, magicSquare, N, M);
-        
     }
     is_magic_square = isMagicSquare(magicSquare, M);
     //-------------------------------------//
