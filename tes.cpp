@@ -141,7 +141,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
         }
     }
     e = omp_get_wtime();
-    printf("isPairwiseDistinct: %.15f", e - s);
+    printf("isPairwiseDistinct: %.30f", e - s);
     return result;
 
     //bool found = false;
