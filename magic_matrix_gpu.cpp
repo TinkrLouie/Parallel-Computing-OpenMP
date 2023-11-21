@@ -252,7 +252,9 @@ bool isMagicSquare(int** matrix, int N)
     return !isPairwiseDistinct(matrix, N);
 }
 int main(int argc, char *argv[])
-{
+{   
+    omp_set_nested(1);
+    
     if (argc != 3) {
         printf("Usage: %s <pattern_filename> <modifier_filename>\n", argv[0]);
         return 1;
