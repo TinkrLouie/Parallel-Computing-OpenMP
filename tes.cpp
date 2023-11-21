@@ -109,28 +109,39 @@ bool isPairwiseDistinct( int** matrix, int N) {
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N)
 {   
-    int i;
     int row_sums[N];
     int col_sums[N];
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
 
-    #pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:row_sums[:N],col_sums[:N])
-    {   
-        if(omp_is_initial_device())
-        {
-          printf("Running on CPU\n");    
-        }
-        // compute row sums
-        #pragma omp parallel for private(i)
-        for (i = 0; i < N; i++)
-        {
-            row_sums[i] = sumRow(matrix, i, N);
-            col_sums[i] = sumColumn(matrix, i, N);
-        }
-    }
+    //#pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:row_sums[:N],col_sums[:N])
+    //{   
+    //    if(omp_is_initial_device())
+    //    {
+    //      printf("Running on CPU\n");    
+    //    }
+    //    // compute row sums
+    //    #pragma omp parallel for private(i)
+    //    for (i = 0; i < N; i++)
+    //    {
+    //        row_sums[i] = sumRow(matrix, i, N);
+    //        col_sums[i] = sumColumn(matrix, i, N);
+    //    }
+    //}
+//
+    //if (!allEqual(row_sums, N)) return false;
+    //if (!allEqual(col_sums, N)) return false;
 
+    for (int i = 0; i < N; i++)
+    {
+        row_sums[i] = sumRow(matrix, i, N);
+    }
     if (!allEqual(row_sums, N)) return false;
+    // compute column sums
+    for (int i = 0; i < N; i++)
+    {
+        col_sums[i] = sumColumn(matrix, i, N);
+    }
     if (!allEqual(col_sums, N)) return false;
 
     //#pragma omp target teams distribute parallel for reduction(+:main_diag_sum) map(to:matrix[:N])
