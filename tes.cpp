@@ -22,7 +22,7 @@
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
-    #pragma omp begin declare target
+    #pragma omp declare target
     int** gpuMatrix;
     int** gpuModifier;
     int** gpuPattern;
