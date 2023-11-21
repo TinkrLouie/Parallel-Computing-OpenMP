@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include <omp.h>
 #include <cstdlib>
-
+#include <unordered_set>
 // The generateMagicSquare() function is supposed to generate a large matrix square from two smaller ones.
 //
 // Input: 
@@ -90,22 +90,43 @@ bool allEqual( int arr[], int N)
 }
 
 bool isPairwiseDistinct( int** matrix, int N) {
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
+    //for (int i = 0; i < N; i++) {
+    //    for (int j = 0; j < N; j++) {
+    //        int currentElement = matrix[i][j];
+    //        for (int row = 0; row < N; row++) {
+    //            for (int col = 0; col < N; col++) {
+    //                if (row != i || col != j) {
+    //                    int otherElement = matrix[row][col];
+    //                    if (currentElement == otherElement) {
+    //                        return true;
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+    //return false;
+
+    bool found = false;
+    std::unordered_set<int> elementSet;
+    int i, j;
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp target teams distribute parallel for collapse(2) shared(found, elementSet) private(i, j) map(to:matrix[:N][:N])
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-            for (int row = 0; row < N; row++) {
-                for (int col = 0; col < N; col++) {
-                    if (row != i || col != j) {
-                        int otherElement = matrix[row][col];
-                        if (currentElement == otherElement) {
-                            return true;
-                        }
-                    }
+            #pragma omp critical
+            {
+                if (elementSet.find(currentElement) != elementSet.end()) {
+                    found = true;
+                } else {
+                    elementSet.insert(currentElement);
                 }
             }
         }
     }
-    return false;
+    return found;
 }
 
 // checks if matrix is a magic square
