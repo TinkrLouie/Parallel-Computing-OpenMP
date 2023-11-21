@@ -125,7 +125,6 @@ bool isPairwiseDistinct( int** matrix, int N) {
                         if (row != i || col != j) {
                             int otherElement = matrix[row][col];
                             if (currentElement == otherElement) {
-                                #pragma omp critical
                                 {
                                     result = true;
                                 }
