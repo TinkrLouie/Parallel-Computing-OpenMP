@@ -22,7 +22,7 @@
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
-     #pragma omp target teams map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
+    #pragma omp target teams map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
     {   
         if(omp_is_initial_device())
         {
@@ -133,7 +133,7 @@ bool isMagicSquare(int** matrix, int N)
     if (!allEqual(row_sums, N)) return false;
     if (!allEqual(col_sums, N)) return false;
 
-    #pragma omp target teams distribute parallel for reduction(+:main_diag_sum) map(to:matrix[:N])
+    //#pragma omp target teams distribute parallel for reduction(+:main_diag_sum) map(to:matrix[:N])
     // compute sum of elements on main diagonal
     for (int i = 0; i < N; i++)
     {
@@ -142,7 +142,7 @@ bool isMagicSquare(int** matrix, int N)
     int row_sum = row_sums[0];
     if (main_diag_sum != row_sum) return false;
 
-    #pragma omp target teams distribute parallel for reduction(+:anti_diag_sum) map(to:matrix[:N])
+    //#pragma omp target teams distribute parallel for reduction(+:anti_diag_sum) map(to:matrix[:N])
     // compute sum of elements on antidiagonal
     for (int i = 0; i < N; i++)
     {
