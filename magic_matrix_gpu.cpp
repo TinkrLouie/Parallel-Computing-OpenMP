@@ -22,31 +22,37 @@
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
+    int i,j, iOuter, jOuter;
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) schedule(guided)
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < N; j++)
+    #pragma omp target teams
+    {   
+        
+        #pragma omp parallel for collapse(2) private(j)//schedule(guided)
+        for (i = 0; i < N; i++)
         {
-		    modifier[i][j] *= M;
-	    }
-    }
-    // VERSION 1
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    //#pragma omp parallel for collapse(2)
-    //for (int i = 0; i < M; i++)
-    //{
-    //    for (int j = 0; j < M; j++)
-    //    {
-    //        int patternRow = i % N;
-    //        int patternCol = j % N;
-    //        magicSquare[i][j] = pattern[patternRow][patternCol];
-	//        magicSquare[i][j] += modifier[i/N][j/N];
-    //    }
-    //}
-
+            for (j = 0; j < N; j++)
+            {
+	    	    modifier[i][j] *= M;
+	        }
+        }
+    
+        #pragma omp barrier
+        // VERSION 1
+        //----------------------------------------------------------------
+        // OpenMP here!!!-------------------------------------------------
+        //#pragma omp parallel for collapse(2) private(j)
+        //for (i = 0; i < M; i++)
+        //{
+        //    for (j = 0; j < M; j++)
+        //    {
+        //        int patternRow = i % N;
+        //        int patternCol = j % N;
+        //        magicSquare[i][j] = pattern[patternRow][patternCol];
+	    //        magicSquare[i][j] += modifier[i/N][j/N];
+        //    }
+        //}
+    
     // VERSION 2
     //#pragma omp parallel for shared(pattern, modifier, magicSquare)
     //for (int i = 0; i < M; i++)
@@ -62,26 +68,27 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //        magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
     //    }
     //}
-    // VERSION 3
-    int iOuter, jOuter;
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) private(iOuter, jOuter) schedule(guided)
-    for (iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
-    {
-        for (jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
-        {   
-            for (int i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
+        // VERSION 3
+    
+        //----------------------------------------------------------------
+        // OpenMP here!!!-------------------------------------------------
+        #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier) private(iOuter, jOuter) //schedule(guided)
+        for (iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
+        {
+            for (jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
             {   
-                int patternRow = i % N;
-                int modifierRow = i / N;
-                int* patternRowPtr = pattern[patternRow];
-                int* modifierRowPtr = modifier[modifierRow];
-                for (int j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
-                {
-                    int patternCol = j % N;
-                    int modifierCol = j / N;
-                    magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
+                for (i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
+                {   
+                    int patternRow = i % N;
+                    int modifierRow = i / N;
+                    int* patternRowPtr = pattern[patternRow];
+                    int* modifierRowPtr = modifier[modifierRow];
+                    for (j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
+                    {
+                        int patternCol = j % N;
+                        int modifierCol = j / N;
+                        magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
+                    }
                 }
             }
         }
@@ -205,18 +212,21 @@ bool isMagicSquare(int** matrix, int N)
     // compute row sums
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp target teams parallel 
+    //#pragma omp target teams parallel 
+    //{   
+    //    int num_teams = omp_get_num_teams();
+    //    int num_threads = omp_get_num_threads();
+        
+    # pragma omp parallel for
+    for (i = 0; i < N; i++)
     {   
-        # pragma omp parallel for private(i)
-        for (i = 0; i < N; i++)
-        {   
-            if(omp_is_initial_device() && i == 0)
-            {
-              printf("Running on CPU\n");    
-            }
-            row_sums[i] = sumRow(matrix, i, N);
-        }
+        //if(omp_is_initial_device() && i == 0)
+        //{
+        //  printf("Running on CPU\n");    
+        //}
+        row_sums[i] = sumRow(matrix, i, N);
     }
+    //}
     if (!allEqual(row_sums, N)) return false;
     int row_sum = row_sums[0];
 
@@ -351,8 +361,25 @@ int main(int argc, char *argv[])
     //BEGINNING-OF-COMPUTATION-------------//
     //-------------------------------------//
     // Timer Init
+
+    omp_set_num_threads( omp_get_max_threads( ) );
+
     itime = omp_get_wtime();
+
+    //int iam, nt, ipoints, istart;
+
+    //#pragma omp parallel default(shared) private(iam, nt, ipoints, istart)
+    //{
+    //    iam = omp_get_thread_num();
+    //    nt = omp_get_num_threads();
+    //    ipoints = M / nt; /* size of partition */
+    //    istart = iam * ipoints; /* starting array index */
+    //    if (iam == nt-1) {/* last thread may do more */
+    //        ipoints = M - istart;
+    //    }
     generateMagicSquare(pattern, modifier, magicSquare, N, M);
+    //}
+
     bool is_magic_square = isMagicSquare(magicSquare, M);
     //-------------------------------------//
     //BOOL FOR DETERMINING MAGIC SQUARE----//
