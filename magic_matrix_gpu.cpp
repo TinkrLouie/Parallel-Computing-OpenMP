@@ -209,9 +209,9 @@ bool isMagicSquare(int** matrix, int N)
     {
         for (i = 0; i < N; i++)
         {   
-            if(!omp_is_initial_device() && i == 0)
+            if(omp_is_initial_device() && i == 0)
             {
-              printf("Running on GPU\n");    
+              printf("Running on CPU\n");    
             }
             row_sums[i] = sumRow(matrix, i, N);
         }
