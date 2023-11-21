@@ -117,7 +117,7 @@ bool isMagicSquare(int** matrix, int N)
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
 
-    #pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:row_sums[:N],col_sums[:N])
+    #pragma omp target map(to:matrix[:N][:N]) map(tofrom:row_sums[:N],col_sums[:N])
     {   
         if(omp_is_initial_device())
         {
