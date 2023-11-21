@@ -26,16 +26,20 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 
     #pragma omp target map(from:gpuMatrix, gpuModifier, gpuPattern) map(to:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N]) 
     {   
+        if(omp_is_initial_device())
+        {
+            printf("CPU");    
+        }
         #pragma omp declare target
         int** gpuMatrix = new int*[M];
         int** gpuModifier = new int*[N];
         int** gpuPattern = new int*[N];
-    
+
         for (int i = 0; i < N; i++) {
             gpuPattern[i] = new int[N];
             gpuModifier[i] = new int[N];
         }
-        
+
         for (int i = 0; i < M; i++) {
             gpuMatrix[i] = new int[M];
         }
