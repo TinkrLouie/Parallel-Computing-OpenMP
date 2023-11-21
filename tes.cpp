@@ -40,6 +40,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 
         #pragma omp barrier
 
+        //ORIGINAL APPROACH
         //#pragma omp parallel for collapse(2)
         //for (int i = 0; i < M; i++)
         //{
@@ -51,6 +52,8 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 	    //        magicSquare[i][j] += modifier[i/N][j/N];
         //    }
         //}
+
+        //MATRIX TILING
         #pragma omp parallel for collapse(2)
         for (int iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
         {
@@ -77,7 +80,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 int sumRow( int** matrix, int row, int N)
 {
     int sum = 0;
-    //#pragma omp target teams distribute parallel for reduction(+:sum) map(to:matrix[:N][:N])
+    #pragma omp target teams distribute parallel for reduction(+:sum) map(to:matrix[:N][:N])
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
