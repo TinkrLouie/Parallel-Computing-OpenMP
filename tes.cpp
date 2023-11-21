@@ -210,7 +210,7 @@ bool isMagicSquare(int** matrix, int N)
     int anti_diag_sum = 0;
     double n1, n2, n3, n4, n5;
     n1 = omp_get_wtime();
-    #pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:row_sums[:N]) schedule(static, CHUNK_SIZE)
+    #pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:row_sums[:N]) 
     {   
         if(omp_is_initial_device())
         {
@@ -227,7 +227,7 @@ bool isMagicSquare(int** matrix, int N)
     }
     if (!allEqual(row_sums, N)) return false;
     n2 = omp_get_wtime();
-    #pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:col_sums[:N]) schedule(static, CHUNK_SIZE)
+    #pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:col_sums[:N])
     {   
         if(omp_is_initial_device())
         {
