@@ -80,7 +80,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 int sumRow( int** matrix, int row, int N)
 {
     int sum = 0;
-    //#pragma omp target for reduction(+:sum)
+    #pragma omp target for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
@@ -173,7 +173,7 @@ bool isMagicSquare(int** matrix, int N)
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
     #pragma omp end declare target
-    #pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:row_sums[:N],col_sums[:N])
+    #pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:row_sums[:N])
     {   
         if(omp_is_initial_device())
         {
@@ -188,7 +188,7 @@ bool isMagicSquare(int** matrix, int N)
     }
     if (!allEqual(row_sums, N)) return false;
 
-    #pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:row_sums[:N],col_sums[:N])
+    #pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:col_sums[:N])
     {   
         if(omp_is_initial_device())
         {
