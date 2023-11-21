@@ -141,7 +141,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
         }
     }
     e = omp_get_wtime();
-    printf("isPairwiseDistinct: %.15f", e - s);
+    printf("isPairwiseDistinct: %.15f\n", e - s);
     return result;
 
     //bool found = false;
@@ -239,7 +239,7 @@ bool isMagicSquare(int** matrix, int N)
     }
     if (anti_diag_sum != row_sum) return false;
     n5 = omp_get_wtime();
-    printf("Total sumrow: %.15f, total sumcol: %.15f, maindiag: %.15f, antidiag: %.15f", n2-n1,n3-n2,n4-n3,n5-n4);
+    printf("Total sumrow: %.15f, total sumcol: %.15f, maindiag: %.15f, antidiag: %.15f\n", n2-n1,n3-n2,n4-n3,n5-n4);
     if(isPairwiseDistinct(matrix, N))
 	    return false;
     return true;
@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
     }
 
     // Timer Init
-    double itime, ftime;
+    double itime, ftime, gm;
     omp_set_nested(1);
 
     FILE *pattern_file = fopen(argv[1], "r");
@@ -324,6 +324,8 @@ int main(int argc, char *argv[])
 
     generateMagicSquare(pattern, modifier, magicSquare, N, M);
 
+    gm = omp_get_wtime();
+
     bool is_magic_square = isMagicSquare(magicSquare, M);
     //-------------------------------------//
     //BOOL FOR DETERMINING MAGIC SQUARE----//
@@ -334,6 +336,7 @@ int main(int argc, char *argv[])
 
     // Timer print out
     printf("\n");
+    printf("Generate: %.15f, isMS: %.15f", gm - itime, ftime - gm);
     printf("Total computation time: %.15f\n", ftime - itime);
 
     // Print first 3 and last 3 elements of generated and checked matrix 
