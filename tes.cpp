@@ -336,7 +336,7 @@ int main(int argc, char *argv[])
 
     // Timer print out
     printf("\n");
-    printf("Generate: %.15f, isMS: %.15f", gm - itime, ftime - gm);
+    printf("Generate: %.15f, isMS: %.15f\n", gm - itime, ftime - gm);
     printf("Total computation time: %.15f\n", ftime - itime);
 
     // Print first 3 and last 3 elements of generated and checked matrix 
