@@ -167,24 +167,24 @@ bool isMagicSquare(int** matrix, int N)
     //    col_sums[i] = sumColumn(matrix, i, N);
     //}
     //if (!allEqual(col_sums, N)) return false;
-    int row_sum = row_sums[0];
-    #pragma omp target reduction(+:main_diag_sum, anti_diag_sum) map(to:matrix[:N][:N])
-    {
+
+    #pragma omp target teams distribute parallel for reduction(+:main_diag_sum) map(to:matrix[:N][:N])
     // compute sum of elements on main diagonal
-    #pragma omp parallel for reduction(+:main_diag_sum)
     for (int i = 0; i < N; i++)
     {
         main_diag_sum += matrix[i][i];
     }
+    int row_sum = row_sums[0];
+    if (main_diag_sum != row_sum) return false;
+
+    #pragma omp target teams distribute parallel for reduction(+:anti_diag_sum) map(to:matrix[:N][:N])
     // compute sum of elements on antidiagonal
-    #pragma omp parallel for reduction(+:anti_diag_sum)
     for (int i = 0; i < N; i++)
     {
         anti_diag_sum += matrix[i][N - 1 - i];
     }
-    }
-    if (main_diag_sum != row_sum) return false;
     if (anti_diag_sum != row_sum) return false;
+
     if(isPairwiseDistinct(matrix, N))
 	    return false;
     return true;
