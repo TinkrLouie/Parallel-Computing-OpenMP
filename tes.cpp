@@ -24,7 +24,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     int** gpuMatrix;
     int** gpuModifier;
     int** gpuPattern;
-    #pragma omp target map(from:gpuMatrix, gpuModifier, gpuPattern) map(to:magicSquare[:M][:M], modfier[:N][:N], pattern[:N][:N]) 
+    #pragma omp target map(from:gpuMatrix, gpuModifier, gpuPattern) map(to:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N]) 
     {   
         gpuModifier = new int*[N];
         gpuPattern = new int*[N];
