@@ -26,8 +26,11 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
     #pragma omp target
-    {   
-
+    {      
+        if(omp_is_initial_device())
+      {
+        printf("CPU");    
+      }
         #pragma omp parallel for collapse(2) private(j)//schedule(guided)
         for (i = 0; i < N; i++)
         {
@@ -53,22 +56,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
         //    }
         //}
     
-    // VERSION 2
-    //#pragma omp parallel for shared(pattern, modifier, magicSquare)
-    //for (int i = 0; i < M; i++)
-    //{
-    //    int patternRow = i % N;
-    //    int modifierRow = i / N;
-    //    int* patternRowPtr = pattern[patternRow];
-    //    int* modifierRowPtr = modifier[modifierRow];
-    //    for (int j = 0; j < M; j++)
-    //    {
-    //        int patternCol = j % N;
-    //        int modifierCol = j / N;
-    //        magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
-    //    }
-    //}
-        // VERSION 3
+        // VERSION 2
     
         //----------------------------------------------------------------
         // OpenMP here!!!-------------------------------------------------
@@ -93,7 +81,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
             }
         }
     }
-    // VERSION 4 --NOT WORKING
+    // VERSION 3 --NOT WORKING
     //int body_start_index;
     //////----------------------------------------------------------------
     ////// OpenMP here!!!-------------------------------------------------
@@ -116,7 +104,6 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //            int modifierCol = j / N;
     //            magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
     //        }
-    //
     //    }
     //}
 }
@@ -362,7 +349,7 @@ int main(int argc, char *argv[])
     //-------------------------------------//
     // Timer Init
 
-    omp_set_num_threads( omp_get_max_threads( ) );
+    //omp_set_num_threads( omp_get_max_threads( ) );
 
     itime = omp_get_wtime();
 
