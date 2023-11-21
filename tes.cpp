@@ -52,25 +52,23 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
         }
     }
 }
-#pragma omp declare target
 // computes sum of elements in a row
 int sumRow( int** matrix, int row, int N)
 {
     int sum = 0;
-    #pragma omp target teams distribute parallel for reduction(+:sum) map(to:matrix[:N][:N])
+    //#pragma omp target teams distribute parallel for reduction(+:sum) map(to:matrix[:N][:N])
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
     }
     return sum;
 }
-#pragma end declare target
 
 // computes sum of elements in a column
 int sumColumn( int** matrix, int col, int N)
 {
     int sum = 0;
-    #pragma omp target teams distribute parallel for reduction(+:sum) map(to:matrix[:N][:N])
+    //#pragma omp target teams distribute parallel for reduction(+:sum) map(to:matrix[:N][:N])
     for (int i = 0; i < N; i++)
     {
         sum += matrix[i][col];
@@ -113,7 +111,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N)
 {   
-    int i;
+    int i,j;
     int row_sums[N];
     int col_sums[N];
     int main_diag_sum = 0;
@@ -129,7 +127,14 @@ bool isMagicSquare(int** matrix, int N)
         #pragma omp parallel for private(i)
         for (i = 0; i < N; i++)
         {
-            row_sums[i] = sumRow(matrix, i, N);
+            //row_sums[i] = sumRow(matrix, i, N);
+            int sum = 0;
+            #pragma omp target teams distribute parallel for reduction(+:sum)
+            for (j = 0; j < N; j++)
+            {
+                sum += matrix[j][i];
+            }
+
             col_sums[i] = sumColumn(matrix, i, N);
         }
     }
