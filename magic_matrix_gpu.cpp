@@ -205,8 +205,9 @@ bool isMagicSquare(int** matrix, int N)
     // compute row sums
     //----------------------------------------------------------------
     // OpenMP here!!!-------------------------------------------------
-    #pragma omp target teams parallel private(i)
-    {
+    #pragma omp target teams parallel 
+    {   
+        # pragma omp parallel for private(i)
         for (i = 0; i < N; i++)
         {   
             if(omp_is_initial_device() && i == 0)
@@ -254,7 +255,7 @@ bool isMagicSquare(int** matrix, int N)
 int main(int argc, char *argv[])
 {   
     omp_set_nested(1);
-    
+
     if (argc != 3) {
         printf("Usage: %s <pattern_filename> <modifier_filename>\n", argv[0]);
         return 1;
