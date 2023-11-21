@@ -22,7 +22,7 @@
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
-    #pragma omp parallel for collapse(2)
+    //#pragma omp parallel for collapse(2)
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
@@ -31,9 +31,9 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 	    }
     }
 
-    #pragma omp barrier
+    //#pragma omp barrier
     
-    #pragma omp parallel for collapse(2)
+    //#pragma omp parallel for collapse(2)
     for (int i = 0; i < M; i++)
     {
         for (int j = 0; j < M; j++)
