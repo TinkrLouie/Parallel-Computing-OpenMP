@@ -224,14 +224,14 @@ int main(int argc, char *argv[])
         {
           printf("Running on CPU\n");    
         }
-        else{
-          int num_teams= omp_get_num_teams(); 
-          int num_threads_per_team = omp_get_num_threads();
-          printf("Running on GPU with %d teams and %d threads per team\n", 
-            num_teams, 
-            num_threads_per_team
-          );
-        }
+        //else{
+        //  int num_teams= omp_get_num_teams(); 
+        //  int num_threads_per_team = omp_get_num_threads();
+        //  printf("Running on GPU with %d teams and %d threads per team\n", 
+        //    num_teams, 
+        //    num_threads_per_team
+        //  );
+        //}
         generateMagicSquare(pattern, modifier, magicSquare, N, M);
     }
     is_magic_square = isMagicSquare(magicSquare, M);
