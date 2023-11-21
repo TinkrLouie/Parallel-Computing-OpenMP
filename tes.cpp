@@ -52,7 +52,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
         }
     }
 }
-
+#pragma omp declare target
 // computes sum of elements in a row
 int sumRow( int** matrix, int row, int N)
 {
@@ -76,6 +76,7 @@ int sumColumn( int** matrix, int col, int N)
     }
     return sum;
 }
+#pragma end declare target
 
 // checks if all elements in an array are equal
 bool allEqual( int arr[], int N)
