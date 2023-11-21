@@ -108,21 +108,21 @@ bool isMagicSquare(int** matrix, int N)
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
 
-    #pragma omp target teams distribute parallel map(to:matrix[:N][:N])
+    #pragma omp target map(to:matrix[:N][:N])
     {   
         if(omp_is_initial_device())
         {
           printf("Running on CPU\n");    
         }
         // compute row sums
-        #pragma omp for
+        #pragma omp parallel for private(i)
         for (int i = 0; i < N; i++)
         {
             row_sums[i] = sumRow(matrix, i, N);
         }
         
         // compute column sums
-        #pragma omp for
+        #pragma omp parallel for private(i)
         for (int i = 0; i < N; i++)
         {
             col_sums[i] = sumColumn(matrix, i, N);
