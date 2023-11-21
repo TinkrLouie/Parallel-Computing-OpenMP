@@ -176,13 +176,16 @@ bool isMagicSquare(int** matrix, int N)
     int col_sums[N];
     int main_diag_sum = 0;
     int anti_diag_sum = 0;
-
+    double n1, n2, n3, n4, n5;
+    n1 = omp_get_wtime();
     #pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:row_sums[:N])
     {   
         if(omp_is_initial_device())
         {
           printf("Running on CPU\n");    
         }
+        
+        
         // compute row sums
         #pragma omp parallel for private(i)
         for (i = 0; i < N; i++)
@@ -191,7 +194,7 @@ bool isMagicSquare(int** matrix, int N)
         }
     }
     if (!allEqual(row_sums, N)) return false;
-
+    n2 = omp_get_wtime();
     #pragma omp target teams distribute parallel map(to:matrix[:N][:N]) map(tofrom:col_sums[:N])
     {   
         if(omp_is_initial_device())
@@ -206,7 +209,7 @@ bool isMagicSquare(int** matrix, int N)
         }
     }
     if (!allEqual(col_sums, N)) return false;
-
+    n3 = omp_get_wtime();
     //for (int i = 0; i < N; i++)
     //{
     //    row_sums[i] = sumRow(matrix, i, N);
@@ -227,7 +230,7 @@ bool isMagicSquare(int** matrix, int N)
     }
     int row_sum = row_sums[0];
     if (main_diag_sum != row_sum) return false;
-
+    n4 = omp_get_wtime();
     #pragma omp target teams distribute parallel for reduction(+:anti_diag_sum) map(to:matrix[:N][:N])
     // compute sum of elements on antidiagonal
     for (int i = 0; i < N; i++)
@@ -235,7 +238,8 @@ bool isMagicSquare(int** matrix, int N)
         anti_diag_sum += matrix[i][N - 1 - i];
     }
     if (anti_diag_sum != row_sum) return false;
-
+    n5 = omp_get_wtime();
+    printf("Total sumrow: %.15f, total sumcol: %.15f, maindiag: %.15f, antidiag: %.15f", n2-n1,n3-n2,n4-n3,n5-n4);
     if(isPairwiseDistinct(matrix, N))
 	    return false;
     return true;
