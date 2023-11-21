@@ -234,8 +234,8 @@ int main(int argc, char *argv[])
           );
         generateMagicSquare(pattern, modifier, magicSquare, N, M);
         bool is_magic_square = isMagicSquare(magicSquare, M);
+        }
     }
-    
 
     //-------------------------------------//
     //BOOL FOR DETERMINING MAGIC SQUARE----//
