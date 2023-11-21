@@ -42,7 +42,13 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 
             #pragma omp parallel for collapse(2) schedule(static, CHUNK_SIZE)
             for (int i = 0; i < N; i++)
-            {
+            {   
+                int num_teams= omp_get_num_teams(); 
+                int num_threads_per_team = omp_get_num_threads();
+                printf("Running on GPU with %d teams and %d threads per team\n", 
+                  num_teams, 
+                  num_threads_per_team
+                );
                 for (int j = 0; j < N; j++)
                 {
 	        	    modifier[i][j] *= M;
