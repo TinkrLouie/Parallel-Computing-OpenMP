@@ -57,6 +57,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 int sumRow( int** matrix, int row, int N)
 {
     int sum = 0;
+    #pragma omp target teams distribute parallel for reduction(+:sum) map(to:matrix[:N][:N])
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
@@ -68,6 +69,7 @@ int sumRow( int** matrix, int row, int N)
 int sumColumn( int** matrix, int col, int N)
 {
     int sum = 0;
+    #pragma omp target teams distribute parallel for reduction(+:sum) map(to:matrix[:N][:N])
     for (int i = 0; i < N; i++)
     {
         sum += matrix[i][col];
@@ -177,6 +179,7 @@ int main(int argc, char *argv[])
 
     // Timer Init
     double itime, ftime;
+    omp_set_nested(1);
 
     FILE *pattern_file = fopen(argv[1], "r");
     FILE *modifier_file = fopen(argv[2], "r");
