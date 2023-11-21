@@ -64,6 +64,7 @@ int sumRow( int** matrix, int row, int N)
     }
     return sum;
 }
+#pragma end declare target
 
 // computes sum of elements in a column
 int sumColumn( int** matrix, int col, int N)
@@ -76,7 +77,7 @@ int sumColumn( int** matrix, int col, int N)
     }
     return sum;
 }
-#pragma end declare target
+
 
 // checks if all elements in an array are equal
 bool allEqual( int arr[], int N)
