@@ -80,7 +80,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
 int sumRow( int** matrix, int row, int N)
 {
     int sum = 0;
-    #pragma omp target parallel for reduction(+:sum) map(to:matrix[:N][:N])
+    #pragma omp target for reduction(+:sum)
     for (int i = 0; i < N; i++)
     {
         sum += matrix[row][i];
