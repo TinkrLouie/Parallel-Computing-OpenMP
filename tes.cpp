@@ -23,7 +23,7 @@
 
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
-    if (N > 50) {
+    //if (N > 50) {
         #pragma omp target map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
         {   
             if(omp_is_initial_device())
@@ -76,38 +76,38 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
                 }
             }
         }
-    }
-    else {
-        #pragma omp parallel for collapse(2)
-        for (int i = 0; i < N; i++)
-        {
-            for (int j = 0; j < N; j++)
-            {
-	    	    modifier[i][j] *= M;
-	        }
-        }
-
-        #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier)
-        for (int iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
-        {
-            for (int jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
-            {   
-                for (int i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
-                {   
-                    int patternRow = i % N;
-                    int modifierRow = i / N;
-                    int* patternRowPtr = pattern[patternRow];
-                    int* modifierRowPtr = modifier[modifierRow];
-                    for (int j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
-                    {
-                        int patternCol = j % N;
-                        int modifierCol = j / N;
-                        magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
-                    }
-                }
-            }
-        }
-    }
+    //}
+    //else {
+    //    #pragma omp parallel for collapse(2)
+    //    for (int i = 0; i < N; i++)
+    //    {
+    //        for (int j = 0; j < N; j++)
+    //        {
+	//    	    modifier[i][j] *= M;
+	//        }
+    //    }
+//
+    //    #pragma omp parallel for collapse(2) shared(magicSquare, pattern, modifier)
+    //    for (int iOuter = 0; iOuter < M; iOuter += CHUNK_SIZE)
+    //    {
+    //        for (int jOuter = 0; jOuter < M; jOuter += CHUNK_SIZE)
+    //        {   
+    //            for (int i = iOuter; i < iOuter + CHUNK_SIZE && i < M; i++)
+    //            {   
+    //                int patternRow = i % N;
+    //                int modifierRow = i / N;
+    //                int* patternRowPtr = pattern[patternRow];
+    //                int* modifierRowPtr = modifier[modifierRow];
+    //                for (int j = jOuter; j < jOuter + CHUNK_SIZE && j < M; j++)
+    //                {
+    //                    int patternCol = j % N;
+    //                    int modifierCol = j / N;
+    //                    magicSquare[i][j] = patternRowPtr[patternCol] + modifierRowPtr[modifierCol];
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
 }
 // computes sum of elements in a row
 int sumRow( int** matrix, int row, int N)
