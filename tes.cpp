@@ -162,6 +162,7 @@ bool isPairwiseDistinct( int** matrix, int N) {
     //return found;
 }
 
+#pragma declare target (sumRow)
 // checks if matrix is a magic square
 bool isMagicSquare(int** matrix, int N)
 {   
