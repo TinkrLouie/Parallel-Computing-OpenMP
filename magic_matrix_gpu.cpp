@@ -24,20 +24,20 @@
 void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N, int M)
 {   
     //if (N > 50) {
-        #pragma omp target teams distribute parallel map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
+        #pragma omp target parallel map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N])
         {   
             if(omp_is_initial_device())
             {
               printf("Running on CPU\n");    
             }
-            else{
-                int num_teams= omp_get_num_teams(); 
-                int num_threads_per_team = omp_get_num_threads();
-                printf("Running on GPU with %d teams and %d threads per team\n", 
-                  num_teams, 
-                  num_threads_per_team
-                );
-            }     
+            //else{
+            //    int num_teams= omp_get_num_teams(); 
+            //    int num_threads_per_team = omp_get_num_threads();
+            //    printf("Running on GPU with %d teams and %d threads per team\n", 
+            //      num_teams, 
+            //      num_threads_per_team
+            //    );
+            //}     
         
 
             #pragma omp parallel for collapse(2) schedule(static, CHUNK_SIZE)
