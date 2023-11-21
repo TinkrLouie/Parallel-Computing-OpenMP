@@ -37,7 +37,7 @@ void generateMagicSquare(int** pattern, int** modifier, int** magicSquare, int N
     //}
     //#pragma omp end declare target
 
-    #pragma omp targetmap(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N]) 
+    #pragma omp target map(tofrom:magicSquare[:M][:M], modifier[:N][:N], pattern[:N][:N]) 
     {   
         if(omp_is_initial_device())
         {
