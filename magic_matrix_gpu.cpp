@@ -149,54 +149,57 @@ bool allEqual( int arr[], int N)
 bool isPairwiseDistinct( int** matrix, int N) {
     double s,e;
     s = omp_get_wtime();
-    bool result = false;
-    #pragma omp target teams distribute parallel map(to:matrix[:N][:N])
-    {
-        #pragma omp parallel for collapse(2) shared(result) schedule(static, CHUNK_SIZE)
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
+    //bool result = false;
+    //#pragma omp target teams distribute parallel map(to:matrix[:N][:N])
+    //{
+    //    #pragma omp parallel for collapse(2) shared(result) schedule(static, CHUNK_SIZE)
+    //    for (int i = 0; i < N; i++) {
+    //        for (int j = 0; j < N; j++) {
+    //            int currentElement = matrix[i][j];
+//
+    //            #pragma omp parallel for collapse(2) reduction(||:result) schedule(static, CHUNK_SIZE)
+    //            for (int row = 0; row < N; row++) {
+    //                for (int col = 0; col < N; col++) {
+    //                    if (row != i || col != j) {
+    //                        int otherElement = matrix[row][col];
+    //                        if (currentElement == otherElement) {
+    //                            {   
+    //                                result = true;
+    //                            }
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
+    //e = omp_get_wtime();
+    //printf("isPairwiseDistinct: %.15f\n", e - s);
+    //return result;
+
+    bool found = false;
+    std::unordered_set<int> elementSet;
+    int i, j;
+
+    //----------------------------------------------------------------
+    // OpenMP here!!!-------------------------------------------------
+    #pragma omp target teams distribute parallel map(to:matrix[:N][:N], elementSet)
+    {   
+        #pragma omp parallel for collapse(2) shared(found, elementSet) private(i, j)
+        for (i = 0; i < N; i++) {
+            for (j = 0; j < N; j++) {
                 int currentElement = matrix[i][j];
 
-                #pragma omp parallel for collapse(2) reduction(||:result) schedule(static, CHUNK_SIZE)
-                for (int row = 0; row < N; row++) {
-                    for (int col = 0; col < N; col++) {
-                        if (row != i || col != j) {
-                            int otherElement = matrix[row][col];
-                            if (currentElement == otherElement) {
-                                {   
-                                    result = true;
-                                }
-                            }
-                        }
-                    }
+                if (elementSet.find(currentElement) != elementSet.end()) {
+                    found = true;
+                } else {
+                    elementSet.insert(currentElement);
                 }
+
             }
         }
     }
-    e = omp_get_wtime();
-    printf("isPairwiseDistinct: %.15f\n", e - s);
-    return result;
-
-    //bool found = false;
-    //std::unordered_set<int> elementSet;
-    //int i, j;
-
-    ////----------------------------------------------------------------
-    //// OpenMP here!!!-------------------------------------------------
-    //#pragma omp target teams distribute parallel for collapse(2) shared(found, elementSet) private(i, j) map(to:matrix[:N][:N], elementSet)
-    //for (i = 0; i < N; i++) {
-    //    for (j = 0; j < N; j++) {
-    //        int currentElement = matrix[i][j];
-    //    
-    //        if (elementSet.find(currentElement) != elementSet.end()) {
-    //            found = true;
-    //        } else {
-    //            elementSet.insert(currentElement);
-    //        }
-    //    
-    //    }
-    //}
-    //return found;
+    return found;
 }
 
 // checks if matrix is a magic square
