@@ -90,43 +90,43 @@ bool allEqual( int arr[], int N)
 }
 
 bool isPairwiseDistinct( int** matrix, int N) {
-    //for (int i = 0; i < N; i++) {
-    //    for (int j = 0; j < N; j++) {
-    //        int currentElement = matrix[i][j];
-    //        for (int row = 0; row < N; row++) {
-    //            for (int col = 0; col < N; col++) {
-    //                if (row != i || col != j) {
-    //                    int otherElement = matrix[row][col];
-    //                    if (currentElement == otherElement) {
-    //                        return true;
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    //}
-    //return false;
-
-    bool found = false;
-    std::unordered_set<int> elementSet;
-    int i, j;
-
-    //----------------------------------------------------------------
-    // OpenMP here!!!-------------------------------------------------
-    #pragma omp target teams distribute parallel for collapse(2) shared(found, elementSet) private(i, j) map(to:matrix[:N][:N], elementSet)
-    for (i = 0; i < N; i++) {
-        for (j = 0; j < N; j++) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
             int currentElement = matrix[i][j];
-        
-            if (elementSet.find(currentElement) != elementSet.end()) {
-                found = true;
-            } else {
-                elementSet.insert(currentElement);
+            for (int row = 0; row < N; row++) {
+                for (int col = 0; col < N; col++) {
+                    if (row != i || col != j) {
+                        int otherElement = matrix[row][col];
+                        if (currentElement == otherElement) {
+                            return true;
+                        }
+                    }
+                }
             }
-        
         }
     }
-    return found;
+    return false;
+
+    //bool found = false;
+    //std::unordered_set<int> elementSet;
+    //int i, j;
+//
+    ////----------------------------------------------------------------
+    //// OpenMP here!!!-------------------------------------------------
+    //#pragma omp target teams distribute parallel for collapse(2) shared(found, elementSet) private(i, j) map(to:matrix[:N][:N], elementSet)
+    //for (i = 0; i < N; i++) {
+    //    for (j = 0; j < N; j++) {
+    //        int currentElement = matrix[i][j];
+    //    
+    //        if (elementSet.find(currentElement) != elementSet.end()) {
+    //            found = true;
+    //        } else {
+    //            elementSet.insert(currentElement);
+    //        }
+    //    
+    //    }
+    //}
+    //return found;
 }
 
 // checks if matrix is a magic square
@@ -167,24 +167,24 @@ bool isMagicSquare(int** matrix, int N)
     //    col_sums[i] = sumColumn(matrix, i, N);
     //}
     //if (!allEqual(col_sums, N)) return false;
-
-    #pragma omp target teams distribute parallel for reduction(+:main_diag_sum) map(to:matrix[:N][:N])
+    int row_sum = row_sums[0];
+    #pragma omp target teams distribute parallel reduction(+:main_diag_sum, anti_diag_sum) map(to:matrix[:N][:N])
+    {
     // compute sum of elements on main diagonal
+    #pragma omp parallel for reduction(+:main_diag_sum)
     for (int i = 0; i < N; i++)
     {
         main_diag_sum += matrix[i][i];
     }
-    int row_sum = row_sums[0];
-    if (main_diag_sum != row_sum) return false;
-
-    #pragma omp target teams distribute parallel for reduction(+:anti_diag_sum) map(to:matrix[:N][:N])
     // compute sum of elements on antidiagonal
+    #pragma omp parallel for reduction(+:anti_diag_sum)
     for (int i = 0; i < N; i++)
     {
         anti_diag_sum += matrix[i][N - 1 - i];
     }
+    }
+    if (main_diag_sum != row_sum) return false;
     if (anti_diag_sum != row_sum) return false;
-
     if(isPairwiseDistinct(matrix, N))
 	    return false;
     return true;
